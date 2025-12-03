@@ -1,7 +1,4 @@
-"""
-Migration script to add password column to customer table.
-Run this once to update your database schema.
-"""
+
 from app import create_app
 from app.models import db
 from sqlalchemy import text
@@ -10,7 +7,7 @@ app = create_app('DevelopmentConfig')
 
 with app.app_context():
     try:
-        # Add password column to customer table
+        
         db.session.execute(text(
             "ALTER TABLE customer ADD COLUMN password VARCHAR(255) NOT NULL DEFAULT 'changeme'"
         ))
