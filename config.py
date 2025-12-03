@@ -21,6 +21,7 @@ class DevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_ECHO = True
     CACHE_DEFAULT_TIMEOUT = 60  # Shorter cache for development
+    RATELIMIT_ENABLED = True  # Set to False to disable rate limiting for testing
 
 class TestingConfig(Config):
     """Testing configuration"""

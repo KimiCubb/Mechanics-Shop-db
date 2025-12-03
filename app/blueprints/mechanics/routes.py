@@ -2,8 +2,9 @@ from flask import request, jsonify
 from app.blueprints.mechanics import mechanics_bp
 from app.blueprints.mechanics.schemas import mechanic_schema, mechanics_schema
 from marshmallow import ValidationError
-from app.models import db, Mechanic
+from app.models import db, Mechanic, service_ticket_mechanic
 from app.extensions import limiter, cache
+from sqlalchemy import func
 
 
 # ============================================
@@ -138,4 +139,43 @@ def delete_mechanic(mechanic_id):
     
     except Exception as e:
         db.session.rollback()
+        return jsonify({'error': str(e)}), 400
+
+
+# READ - Get mechanics sorted by most tickets worked
+@mechanics_bp.route('/top-performers', methods=['GET'])
+@cache.cached(timeout=60)
+def get_mechanics_by_ticket_count():
+    """
+    Get all mechanics ordered by the number of tickets they have worked on.
+    Returns mechanics with the most tickets first.
+    """
+    try:
+        # Query mechanics with ticket count, ordered by count descending
+        mechanics_with_counts = db.session.query(
+            Mechanic,
+            func.count(service_ticket_mechanic.c.service_ticket_id).label('ticket_count')
+        ).outerjoin(
+            service_ticket_mechanic,
+            Mechanic.mechanic_id == service_ticket_mechanic.c.mechanic_id
+        ).group_by(
+            Mechanic.mechanic_id
+        ).order_by(
+            func.count(service_ticket_mechanic.c.service_ticket_id).desc()
+        ).all()
+        
+        # Format response with ticket counts
+        mechanics_data = []
+        for mechanic, ticket_count in mechanics_with_counts:
+            mechanic_info = mechanic_schema.dump(mechanic)
+            mechanic_info['ticket_count'] = ticket_count
+            mechanics_data.append(mechanic_info)
+        
+        return jsonify({
+            'message': 'Mechanics retrieved successfully, ordered by tickets worked',
+            'count': len(mechanics_data),
+            'mechanics': mechanics_data
+        }), 200
+    
+    except Exception as e:
         return jsonify({'error': str(e)}), 400

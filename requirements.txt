@@ -6,6 +6,9 @@ marshmallow-sqlalchemy>=0.30.0
 flask-limiter>=3.5.0
 flask-caching>=2.1.0
 
+# Authentication
+python-jose>=3.3.0
+
 # Database
 mysql-connector-python>=8.2.0
 

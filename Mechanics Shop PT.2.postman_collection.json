@@ -1,0 +1,1529 @@
+{
+	"info": {
+		"_postman_id": "4ecd20d5-0c7b-4b57-9a6e-9700dd7c923b",
+		"name": "Mechanics Shop pt.2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "49899486",
+		"_collection_link": "https://cirillok95-8009340.postman.co/workspace/Kimberly-Cirillo's-Workspace~b0f5d7ca-b35c-4e9c-8f88-40e07c40d246/collection/49899486-4ecd20d5-0c7b-4b57-9a6e-9700dd7c923b?action=share&source=collection_link&creator=49899486"
+	},
+	"item": [
+		{
+			"name": "New Request",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"John Doe\",\n    \"phone\": \"555-123-4567\",\n    \"email\": \"john@example.com\",\n    \"address\": \"123 Main St\",\n    \"password\": \"secure123\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/customers/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"customers",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/customers/",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Mandolorian\",\n    \"phone\": \"555-123-4892\",\n    \"email\": \"thisistheway@mandolorian.com\",\n    \"address\": \"123 Galaxy St\",\n    \"password\": \"mando321\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/customers/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"customers",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/customers/login",
+			"request": {
+				"auth": {
+					"type": "bearer"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"john@example.com\",\n    \"password\": \"secure123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/customers/login",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"customers",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/vehicles/",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"customer_id\": 1,\n    \"make\": \"Toyota\",\n    \"model\": \"Camry\",\n    \"year\": 2022,\n    \"vin\": \"1HGBH41JXMN109186\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/vehicles/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"vehicles",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/vehicles/",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"customer_id\": 2,\n    \"make\": \"Honda\",\n    \"model\": \"Civic\",\n    \"year\": 2016,\n    \"vin\": \"1HGBH41JKSDALFJ\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/vehicles/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"vehicles",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/mechanics/",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Mike John\",\n    \"email\": \"mike@mechanicshop.com\",\n    \"address\": \"456 Workshop Ave\",\n    \"phone\": \"555-222-3333\",\n    \"salary\": 55000.00\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/mechanics/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"mechanics",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/mechanics/",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Darth Maul\",\n    \"email\": \"mauldarth@mechanicshop.com\",\n    \"address\": \"456 Workshop Ave\",\n    \"phone\": \"555-222-3333\",\n    \"salary\": 82000.00\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/mechanics/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"mechanics",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/inventory/",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Oil Filter\",\n    \"price\": 12.99\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/inventory/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"inventory",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/service-tickets/",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"vehicle_id\": 1,\n    \"description\": \"Oil change and tire rotation\",\n    \"status\": \"Open\",\n    \"total_cost\": 75.00\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/service-tickets/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"service-tickets",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/service-tickets/1/assign-mechanic/1",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"vehicle_id\": 1,\n    \"description\": \"Oil change and tire rotation\",\n    \"status\": \"Open\",\n    \"total_cost\": 75.00\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/service-tickets/1/assign-mechanic/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"service-tickets",
+						"1",
+						"assign-mechanic",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/inventory/",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"name\": \"Brake Pads (Front)\", \"price\": 45.99 }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/inventory/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"inventory",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/service-tickets/1/add-part",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"part_id\": 1,\n    \"quantity\": 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/service-tickets/1/add-part",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"service-tickets",
+						"1",
+						"add-part"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/service-tickets/1/add-part",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"part_id\": 2,\n    \"quantity\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/service-tickets/1/add-part",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"service-tickets",
+						"1",
+						"add-part"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/customers/my-tickets",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjQ3NzMxMTEsImlhdCI6MTc2NDc2OTUxMSwic3ViIjoiMSJ9.goJzT_18YWtLapjbB5snvxxM6wQZ8GH--WPyjDKLntc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/customers/my-tickets",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"customers",
+						"my-tickets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/customers/1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjQ3NzMxMTEsImlhdCI6MTc2NDc2OTUxMSwic3ViIjoiMSJ9.goJzT_18YWtLapjbB5snvxxM6wQZ8GH--WPyjDKLntc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"John Doe\",\n    \"phone\": \"483-486-5792\",\n    \"email\": \"john@example.com\",\n    \"address\": \"123 Main St, City, ST 12345\",\n    \"password\": \"secure123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/customers/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"customers",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/customers/2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjQ3NzMxMTEsImlhdCI6MTc2NDc2OTUxMSwic3ViIjoiMSJ9.goJzT_18YWtLapjbB5snvxxM6wQZ8GH--WPyjDKLntc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"John Doe\",\n    \"phone\": \"483-486-5792\",\n    \"email\": \"john@example.com\",\n    \"address\": \"123 Main St, City, ST 12345\",\n    \"password\": \"secure123\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/customers/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"customers",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/vehicles/2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjQ3NzMxMTEsImlhdCI6MTc2NDc2OTUxMSwic3ViIjoiMSJ9.goJzT_18YWtLapjbB5snvxxM6wQZ8GH--WPyjDKLntc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"customer_id\": 2,\n    \"make\": \"Honda\",\n    \"model\": \"Accord\",\n    \"year\": 2015,\n    \"vin\": \"1HGBH41JJKFLASD\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/vehicles/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"vehicles",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/vehicles/",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjQ3NzMxMTEsImlhdCI6MTc2NDc2OTUxMSwic3ViIjoiMSJ9.goJzT_18YWtLapjbB5snvxxM6wQZ8GH--WPyjDKLntc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"customer_id\": 1,\n    \"make\": \"Toyota\",\n    \"model\": \"Prius\",\n    \"year\": 2015,\n    \"vin\": \"1ASDFHJJKFLASD\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/vehicles/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"vehicles",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/vehicles/3",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjQ3NzMxMTEsImlhdCI6MTc2NDc2OTUxMSwic3ViIjoiMSJ9.goJzT_18YWtLapjbB5snvxxM6wQZ8GH--WPyjDKLntc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"customer_id\": 1,\n    \"make\": \"Toyota\",\n    \"model\": \"Prius\",\n    \"year\": 2015,\n    \"vin\": \"1ASDFHJJKFLASD\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/vehicles/3",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"vehicles",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/mechanics/",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjQ3NzMxMTEsImlhdCI6MTc2NDc2OTUxMSwic3ViIjoiMSJ9.goJzT_18YWtLapjbB5snvxxM6wQZ8GH--WPyjDKLntc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Jackie Kennedy\",\n    \"email\": \"kennedy@mechanicshop.com\",\n    \"address\": \"456 Workshop Ave\",\n    \"phone\": \"555-222-7620\",\n    \"salary\": 71000.00\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/mechanics/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"mechanics",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:5000/mechanics/2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjQ3NzMxMTEsImlhdCI6MTc2NDc2OTUxMSwic3ViIjoiMSJ9.goJzT_18YWtLapjbB5snvxxM6wQZ8GH--WPyjDKLntc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Jackie Kennedy\",\n    \"email\": \"kennedy@mechanicshop.com\",\n    \"address\": \"456 Workshop Ave\",\n    \"phone\": \"555-222-7620\",\n    \"salary\": 81000.00\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/mechanics/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"mechanics",
+						"2"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "http://127.0.0.1:5000/mechanics/2",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Jackie Kennedy\",\n    \"email\": \"kennedy@mechanicshop.com\",\n    \"address\": \"456 Workshop Ave\",\n    \"phone\": \"555-222-7620\",\n    \"salary\": 81000.00\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/mechanics/2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"mechanics",
+								"2"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "",
+					"header": [
+						{
+							"key": "Server",
+							"value": "Werkzeug/3.1.4 Python/3.13.7"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 03 Dec 2025 14:08:27 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "249"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"mechanic\": {\n        \"address\": \"456 Workshop Ave\",\n        \"email\": \"kennedy@mechanicshop.com\",\n        \"mechanic_id\": 2,\n        \"name\": \"Jackie Kennedy\",\n        \"phone\": \"555-222-7620\",\n        \"salary\": 81000\n    },\n    \"message\": \"Mechanic updated successfully\"\n}"
+				}
+			]
+		},
+		{
+			"name": "http://127.0.0.1:5000/service-tickets/",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjQ3NzMxMTEsImlhdCI6MTc2NDc2OTUxMSwic3ViIjoiMSJ9.goJzT_18YWtLapjbB5snvxxM6wQZ8GH--WPyjDKLntc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"vehicle_id\": 2,\n    \"description\": \"Brake Pad Replacement\",\n    \"status\": \"Open\",\n    \"total_cost\": 879.00\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/service-tickets/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"service-tickets",
+						""
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "http://127.0.0.1:5000/service-tickets/",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"vehicle_id\": 2,\n    \"description\": \"Brake Pad Replacement\",\n    \"status\": \"Open\",\n    \"total_cost\": 879.00\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/service-tickets/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"service-tickets",
+								""
+							]
+						}
+					},
+					"status": "CREATED",
+					"code": 201,
+					"_postman_previewlanguage": "",
+					"header": [
+						{
+							"key": "Server",
+							"value": "Werkzeug/3.1.4 Python/3.13.7"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 03 Dec 2025 14:10:59 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "302"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Service ticket created successfully\",\n    \"service_ticket\": {\n        \"date_in\": \"2025-12-03T14:10:59\",\n        \"date_out\": null,\n        \"description\": \"Brake Pad Replacement\",\n        \"mechanics\": [],\n        \"service_ticket_id\": 2,\n        \"status\": \"Open\",\n        \"total_cost\": 879,\n        \"vehicle_id\": 2\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "http://127.0.0.1:5000/service-tickets/2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjQ3NzMxMTEsImlhdCI6MTc2NDc2OTUxMSwic3ViIjoiMSJ9.goJzT_18YWtLapjbB5snvxxM6wQZ8GH--WPyjDKLntc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"vehicle_id\": 2,\n    \"description\": \"Brake Pad Replacement for front brakes\",\n    \"status\": \"Open\",\n    \"total_cost\": 479.00\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/service-tickets/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"service-tickets",
+						"2"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "http://127.0.0.1:5000/service-tickets/2",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"vehicle_id\": 2,\n    \"description\": \"Brake Pad Replacement for front brakes\",\n    \"status\": \"Open\",\n    \"total_cost\": 479.00\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/service-tickets/2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"service-tickets",
+								"2"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "",
+					"header": [
+						{
+							"key": "Server",
+							"value": "Werkzeug/3.1.4 Python/3.13.7"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 03 Dec 2025 14:11:53 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "319"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Service ticket updated successfully\",\n    \"service_ticket\": {\n        \"date_in\": \"2025-12-03T14:10:59\",\n        \"date_out\": null,\n        \"description\": \"Brake Pad Replacement for front brakes\",\n        \"mechanics\": [],\n        \"service_ticket_id\": 2,\n        \"status\": \"Open\",\n        \"total_cost\": 479,\n        \"vehicle_id\": 2\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "http://127.0.0.1:5000/service-tickets/2/assign-mechanic/2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjQ3NzMxMTEsImlhdCI6MTc2NDc2OTUxMSwic3ViIjoiMSJ9.goJzT_18YWtLapjbB5snvxxM6wQZ8GH--WPyjDKLntc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"vehicle_id\": 2,\n    \"description\": \"Brake Pad Replacement for front brakes\",\n    \"status\": \"Open\",\n    \"total_cost\": 479.00\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/service-tickets/2/assign-mechanic/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"service-tickets",
+						"2",
+						"assign-mechanic",
+						"2"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "http://127.0.0.1:5000/service-tickets/2/assign-mechanic/2",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"vehicle_id\": 2,\n    \"description\": \"Brake Pad Replacement for front brakes\",\n    \"status\": \"Open\",\n    \"total_cost\": 479.00\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/service-tickets/2/assign-mechanic/2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"service-tickets",
+								"2",
+								"assign-mechanic",
+								"2"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "",
+					"header": [
+						{
+							"key": "Server",
+							"value": "Werkzeug/3.1.4 Python/3.13.7"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 03 Dec 2025 14:12:36 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "573"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Mechanic Jackie Kennedy assigned to service ticket 2 successfully\",\n    \"service_ticket\": {\n        \"date_in\": \"2025-12-03T14:10:59\",\n        \"date_out\": null,\n        \"description\": \"Brake Pad Replacement for front brakes\",\n        \"mechanics\": [\n            {\n                \"address\": \"456 Workshop Ave\",\n                \"email\": \"kennedy@mechanicshop.com\",\n                \"mechanic_id\": 2,\n                \"name\": \"Jackie Kennedy\",\n                \"phone\": \"555-222-7620\",\n                \"salary\": 81000\n            }\n        ],\n        \"service_ticket_id\": 2,\n        \"status\": \"Open\",\n        \"total_cost\": 479,\n        \"vehicle_id\": 2\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "http://127.0.0.1:5000/service-tickets/2/assign-mechanic/1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjQ3NzMxMTEsImlhdCI6MTc2NDc2OTUxMSwic3ViIjoiMSJ9.goJzT_18YWtLapjbB5snvxxM6wQZ8GH--WPyjDKLntc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"vehicle_id\": 2,\n    \"description\": \"Brake Pad Replacement for front brakes\",\n    \"status\": \"Open\",\n    \"total_cost\": 479.00\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/service-tickets/2/assign-mechanic/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"service-tickets",
+						"2",
+						"assign-mechanic",
+						"1"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "http://127.0.0.1:5000/service-tickets/2/assign-mechanic/1",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"vehicle_id\": 2,\n    \"description\": \"Brake Pad Replacement for front brakes\",\n    \"status\": \"Open\",\n    \"total_cost\": 479.00\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/service-tickets/2/assign-mechanic/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"service-tickets",
+								"2",
+								"assign-mechanic",
+								"1"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "",
+					"header": [
+						{
+							"key": "Server",
+							"value": "Werkzeug/3.1.4 Python/3.13.7"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 03 Dec 2025 14:13:02 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "780"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Mechanic Mike John assigned to service ticket 2 successfully\",\n    \"service_ticket\": {\n        \"date_in\": \"2025-12-03T14:10:59\",\n        \"date_out\": null,\n        \"description\": \"Brake Pad Replacement for front brakes\",\n        \"mechanics\": [\n            {\n                \"address\": \"456 Workshop Ave\",\n                \"email\": \"mike@mechanicshop.com\",\n                \"mechanic_id\": 1,\n                \"name\": \"Mike John\",\n                \"phone\": \"555-222-3333\",\n                \"salary\": 55000\n            },\n            {\n                \"address\": \"456 Workshop Ave\",\n                \"email\": \"kennedy@mechanicshop.com\",\n                \"mechanic_id\": 2,\n                \"name\": \"Jackie Kennedy\",\n                \"phone\": \"555-222-7620\",\n                \"salary\": 81000\n            }\n        ],\n        \"service_ticket_id\": 2,\n        \"status\": \"Open\",\n        \"total_cost\": 479,\n        \"vehicle_id\": 2\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "http://127.0.0.1:5000/service-tickets/2/remove-mechanic/1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjQ3NzMxMTEsImlhdCI6MTc2NDc2OTUxMSwic3ViIjoiMSJ9.goJzT_18YWtLapjbB5snvxxM6wQZ8GH--WPyjDKLntc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"vehicle_id\": 2,\n    \"description\": \"Brake Pad Replacement for front brakes\",\n    \"status\": \"Open\",\n    \"total_cost\": 479.00\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/service-tickets/2/remove-mechanic/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"service-tickets",
+						"2",
+						"remove-mechanic",
+						"1"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "http://127.0.0.1:5000/service-tickets/2/remove-mechanic/1",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"vehicle_id\": 2,\n    \"description\": \"Brake Pad Replacement for front brakes\",\n    \"status\": \"Open\",\n    \"total_cost\": 479.00\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/service-tickets/2/remove-mechanic/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"service-tickets",
+								"2",
+								"remove-mechanic",
+								"1"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "",
+					"header": [
+						{
+							"key": "Server",
+							"value": "Werkzeug/3.1.4 Python/3.13.7"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 03 Dec 2025 14:13:44 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "569"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Mechanic Mike John removed from service ticket 2 successfully\",\n    \"service_ticket\": {\n        \"date_in\": \"2025-12-03T14:10:59\",\n        \"date_out\": null,\n        \"description\": \"Brake Pad Replacement for front brakes\",\n        \"mechanics\": [\n            {\n                \"address\": \"456 Workshop Ave\",\n                \"email\": \"kennedy@mechanicshop.com\",\n                \"mechanic_id\": 2,\n                \"name\": \"Jackie Kennedy\",\n                \"phone\": \"555-222-7620\",\n                \"salary\": 81000\n            }\n        ],\n        \"service_ticket_id\": 2,\n        \"status\": \"Open\",\n        \"total_cost\": 479,\n        \"vehicle_id\": 2\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "http://127.0.0.1:5000/inventory/2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjQ3NzMxMTEsImlhdCI6MTc2NDc2OTUxMSwic3ViIjoiMSJ9.goJzT_18YWtLapjbB5snvxxM6wQZ8GH--WPyjDKLntc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"vehicle_id\": 2,\n    \"description\": \"Brake Pad Replacement for front brakes\",\n    \"status\": \"Open\",\n    \"total_cost\": 479.00\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/inventory/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"inventory",
+						"2"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "http://127.0.0.1:5000/inventory/2",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"vehicle_id\": 2,\n    \"description\": \"Brake Pad Replacement for front brakes\",\n    \"status\": \"Open\",\n    \"total_cost\": 479.00\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/inventory/2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"inventory",
+								"2"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "",
+					"header": [
+						{
+							"key": "Server",
+							"value": "Werkzeug/3.1.4 Python/3.13.7"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 03 Dec 2025 14:16:25 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "47"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Part 2 deleted successfully\"\n}"
+				}
+			]
+		},
+		{
+			"name": "http://127.0.0.1:5000/mechanics/1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjQ3NzMxMTEsImlhdCI6MTc2NDc2OTUxMSwic3ViIjoiMSJ9.goJzT_18YWtLapjbB5snvxxM6wQZ8GH--WPyjDKLntc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"vehicle_id\": 2,\n    \"description\": \"Brake Pad Replacement for front brakes\",\n    \"status\": \"Open\",\n    \"total_cost\": 479.00\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/mechanics/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"mechanics",
+						"1"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "http://127.0.0.1:5000/mechanics/1",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"vehicle_id\": 2,\n    \"description\": \"Brake Pad Replacement for front brakes\",\n    \"status\": \"Open\",\n    \"total_cost\": 479.00\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/mechanics/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"mechanics",
+								"1"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "",
+					"header": [
+						{
+							"key": "Server",
+							"value": "Werkzeug/3.1.4 Python/3.13.7"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 03 Dec 2025 14:16:55 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "51"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Mechanic 1 deleted successfully\"\n}"
+				}
+			]
+		}
+	]
+}

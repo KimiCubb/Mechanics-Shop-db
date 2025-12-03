@@ -5,6 +5,7 @@ from app.blueprints.customers import customers_bp
 from app.blueprints.vehicles import vehicles_bp
 from app.blueprints.mechanics import mechanics_bp
 from app.blueprints.service_tickets import service_tickets_bp
+from app.blueprints.inventory import inventory_bp
 
 def create_app(config_name):
     app = Flask(__name__)
@@ -21,6 +22,7 @@ def create_app(config_name):
     app.register_blueprint(vehicles_bp, url_prefix='/vehicles')
     app.register_blueprint(mechanics_bp, url_prefix='/mechanics')
     app.register_blueprint(service_tickets_bp, url_prefix='/service-tickets')
+    app.register_blueprint(inventory_bp, url_prefix='/inventory')
 
     # Health check endpoint (exempt from rate limiting)
     @app.route('/health', methods=['GET'])

@@ -1,0 +1,329 @@
+================================================================================
+                    POSTMAN TESTING GUIDE - MECHANIC SHOP API
+================================================================================
+
+Base URL: http://127.0.0.1:5000
+
+================================================================================
+1. CUSTOMERS
+================================================================================
+
+--- Create Customer (Registration) ---
+POST /customers/
+Body (JSON):
+{
+    "name": "John Doe",
+    "phone": "555-123-4567",
+    "email": "john@example.com",
+    "address": "123 Main St, City, ST 12345",
+    "password": "secure123"
+}
+
+--- Login (Get Token) ---
+POST /customers/login
+Body (JSON):
+{
+    "email": "john@example.com",
+    "password": "secure123"
+}
+NOTE: Save the "auth_token" from response for authenticated routes!
+
+--- Get All Customers (Paginated) ---
+GET /customers/?page=1&per_page=10
+
+--- Get Single Customer ---
+GET /customers/1
+
+--- Update Customer (Requires Token) ---
+PUT /customers/1
+Headers:
+    Authorization: Bearer <your_auth_token>
+Body (JSON):
+{
+    "name": "John Smith",
+    "phone": "555-999-8888"
+}
+
+--- Delete Customer (Requires Token) ---
+DELETE /customers/1
+Headers:
+    Authorization: Bearer <your_auth_token>
+
+--- Get My Tickets (Requires Token) ---
+GET /customers/my-tickets
+Headers:
+    Authorization: Bearer <your_auth_token>
+
+
+================================================================================
+2. VEHICLES
+================================================================================
+
+--- Create Vehicle ---
+POST /vehicles/
+Body (JSON):
+{
+    "customer_id": 1,
+    "make": "Toyota",
+    "model": "Camry",
+    "year": 2022,
+    "vin": "1HGBH41JXMN109186"
+}
+
+--- Get All Vehicles ---
+GET /vehicles/
+
+--- Get Single Vehicle ---
+GET /vehicles/1
+
+--- Get Vehicles by Customer ---
+GET /vehicles/customer/1
+
+--- Update Vehicle ---
+PUT /vehicles/1
+Body (JSON):
+{
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": 2023
+}
+
+--- Delete Vehicle ---
+DELETE /vehicles/1
+
+
+================================================================================
+3. MECHANICS
+================================================================================
+
+--- Create Mechanic ---
+POST /mechanics/
+Body (JSON):
+{
+    "name": "Mike Johnson",
+    "email": "mike@mechanicshop.com",
+    "address": "456 Workshop Ave",
+    "phone": "555-222-3333",
+    "salary": 55000.00
+}
+
+--- Get All Mechanics ---
+GET /mechanics/
+
+--- Get Single Mechanic ---
+GET /mechanics/1
+
+--- Get Top Performers (By Ticket Count) ---
+GET /mechanics/top-performers
+
+--- Update Mechanic ---
+PUT /mechanics/1
+Body (JSON):
+{
+    "salary": 60000.00,
+    "phone": "555-444-5555"
+}
+
+--- Delete Mechanic ---
+DELETE /mechanics/1
+
+
+================================================================================
+4. SERVICE TICKETS
+================================================================================
+
+--- Create Service Ticket ---
+POST /service-tickets/
+Body (JSON):
+{
+    "vehicle_id": 1,
+    "description": "Oil change and tire rotation",
+    "status": "Open",
+    "total_cost": 75.00
+}
+
+--- Get All Service Tickets ---
+GET /service-tickets/
+
+--- Get Single Service Ticket ---
+GET /service-tickets/1
+
+--- Update Service Ticket ---
+PUT /service-tickets/1
+Body (JSON):
+{
+    "status": "In Progress",
+    "total_cost": 150.00,
+    "description": "Oil change, tire rotation, and brake inspection"
+}
+
+--- Assign Mechanic to Ticket ---
+PUT /service-tickets/1/assign-mechanic/1
+
+--- Remove Mechanic from Ticket ---
+PUT /service-tickets/1/remove-mechanic/1
+
+--- Edit Mechanics (Batch Add/Remove) ---
+PUT /service-tickets/1/edit
+Body (JSON):
+{
+    "add_ids": [1, 2],
+    "remove_ids": [3]
+}
+
+--- Delete Service Ticket ---
+DELETE /service-tickets/1
+
+
+================================================================================
+5. INVENTORY (Parts)
+================================================================================
+
+--- Create Part ---
+POST /inventory/
+Body (JSON):
+{
+    "name": "Oil Filter",
+    "price": 12.99
+}
+
+--- More Sample Parts ---
+POST /inventory/
+{ "name": "Brake Pads (Front)", "price": 45.99 }
+
+POST /inventory/
+{ "name": "Air Filter", "price": 18.50 }
+
+POST /inventory/
+{ "name": "Spark Plugs (Set of 4)", "price": 32.00 }
+
+POST /inventory/
+{ "name": "Windshield Wipers", "price": 24.99 }
+
+--- Get All Parts ---
+GET /inventory/
+
+--- Get Single Part ---
+GET /inventory/1
+
+--- Search Parts ---
+GET /inventory/search?q=filter
+
+--- Update Part ---
+PUT /inventory/1
+Body (JSON):
+{
+    "name": "Premium Oil Filter",
+    "price": 15.99
+}
+
+--- Delete Part ---
+DELETE /inventory/1
+
+
+================================================================================
+6. SERVICE TICKET PARTS
+================================================================================
+
+--- Add Part to Service Ticket ---
+POST /service-tickets/1/add-part
+Body (JSON):
+{
+    "part_id": 1,
+    "quantity": 2
+}
+
+--- Add Another Part ---
+POST /service-tickets/1/add-part
+Body (JSON):
+{
+    "part_id": 2,
+    "quantity": 1
+}
+
+--- Get All Parts on a Ticket ---
+GET /service-tickets/1/parts
+
+--- Remove Part from Ticket ---
+DELETE /service-tickets/1/remove-part/1
+
+
+================================================================================
+7. HEALTH CHECK
+================================================================================
+
+--- Check API Status ---
+GET /health
+
+
+================================================================================
+RECOMMENDED TESTING ORDER
+================================================================================
+
+1.  Create Customer              → Save customer_id
+2.  Login                        → Save auth_token
+3.  Create Vehicle (using customer_id) → Save vehicle_id
+4.  Create Mechanic(s)           → Save mechanic_ids
+5.  Create Inventory Parts       → Save part_ids
+6.  Create Service Ticket (using vehicle_id) → Save ticket_id
+7.  Assign Mechanics to ticket
+8.  Add Parts to ticket
+9.  Get My Tickets (with auth token)
+10. Test Updates and Deletes
+
+
+================================================================================
+POSTMAN ENVIRONMENT VARIABLES (Optional Setup)
+================================================================================
+
+Variable Name     | Example Value
+------------------|----------------------------------
+base_url          | http://127.0.0.1:5000
+auth_token        | eyJ0eXAiOiJKV1Q...
+customer_id       | 1
+vehicle_id        | 1
+mechanic_id       | 1
+ticket_id         | 1
+part_id           | 1
+
+Usage: {{base_url}}/customers/{{customer_id}}
+
+
+================================================================================
+AUTHENTICATION NOTES
+================================================================================
+
+Routes that require Bearer Token authentication:
+- PUT  /customers/<id>      (Update customer - can only update own profile)
+- DELETE /customers/<id>    (Delete customer - can only delete own account)
+- GET  /customers/my-tickets (Get authenticated customer's service tickets)
+
+Header format:
+    Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...
+
+
+================================================================================
+RATE LIMITING INFO
+================================================================================
+
+The following rate limits are applied:
+- Login:          5 per minute
+- Create routes:  10 per minute
+- Update routes:  20 per minute
+- Delete routes:  5 per minute
+- Assign/Remove:  30 per minute
+
+If you exceed the limit, you'll receive a 429 Too Many Requests response.
+
+
+================================================================================
+CACHING INFO
+================================================================================
+
+GET routes are cached for 60 seconds. If you create/update data and don't
+see changes immediately, wait for the cache to expire or restart the server.
+
+
+================================================================================
+                              END OF TESTING GUIDE
+================================================================================

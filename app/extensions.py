@@ -7,6 +7,7 @@ from flask_caching import Cache
 limiter = Limiter(
     key_func=get_remote_address,
     default_limits=["200 per day", "50 per hour"],
+    storage_uri="memory://",  # Explicitly set memory storage
 )
 
 # Initialize Marshmallow
