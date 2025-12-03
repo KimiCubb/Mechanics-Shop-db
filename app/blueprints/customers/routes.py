@@ -3,6 +3,7 @@ from app.blueprints.customers import customers_bp
 from app.blueprints.customers.schemas import customer_schema, customers_schema
 from marshmallow import ValidationError
 from app.models import db, Customer
+from app.extensions import limiter, cache
 
 
 # ============================================
@@ -11,6 +12,7 @@ from app.models import db, Customer
 
 # CREATE - Add a new customer
 @customers_bp.route('/', methods=['POST'])
+@limiter.limit("10 per minute")  # Prevent spam creation
 def create_customer():
     """Create a new customer"""
     try:
@@ -42,6 +44,7 @@ def create_customer():
 
 # READ - Get all customers
 @customers_bp.route('/', methods=['GET'])
+@cache.cached(timeout=60)  # Cache for 60 seconds
 def get_customers():
     """Get all customers"""
     try:
@@ -57,6 +60,7 @@ def get_customers():
 
 # READ - Get a specific customer by ID
 @customers_bp.route('/<int:customer_id>', methods=['GET'])
+@cache.cached(timeout=60)  # Cache for 60 seconds
 def get_customer(customer_id):
     """Get a specific customer by ID"""
     try:
@@ -75,6 +79,7 @@ def get_customer(customer_id):
 
 # UPDATE - Update an existing customer
 @customers_bp.route('/<int:customer_id>', methods=['PUT'])
+@limiter.limit("20 per minute")  # Rate limit updates
 def update_customer(customer_id):
     """Update an existing customer"""
     try:
@@ -108,6 +113,7 @@ def update_customer(customer_id):
 
 # DELETE - Delete a customer
 @customers_bp.route('/<int:customer_id>', methods=['DELETE'])
+@limiter.limit("5 per minute")  # Strict limit on deletions
 def delete_customer(customer_id):
     """Delete a customer"""
     try:

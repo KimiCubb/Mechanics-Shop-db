@@ -3,6 +3,7 @@ from app.blueprints.service_tickets import service_tickets_bp
 from app.blueprints.service_tickets.schemas import service_ticket_schema, service_tickets_schema
 from marshmallow import ValidationError
 from app.models import db, ServiceTicket, Mechanic
+from app.extensions import limiter, cache
 
 
 # ============================================
@@ -11,6 +12,7 @@ from app.models import db, ServiceTicket, Mechanic
 
 # CREATE - Add a new service ticket
 @service_tickets_bp.route('/', methods=['POST'])
+@limiter.limit("10 per minute")
 def create_service_ticket():
     """Create a new service ticket"""
     try:
@@ -43,6 +45,7 @@ def create_service_ticket():
 
 # READ - Get all service tickets
 @service_tickets_bp.route('/', methods=['GET'])
+@cache.cached(timeout=60)
 def get_service_tickets():
     """Get all service tickets"""
     try:
@@ -59,6 +62,7 @@ def get_service_tickets():
 
 # READ - Get a specific service ticket by ID
 @service_tickets_bp.route('/<int:ticket_id>', methods=['GET'])
+@cache.cached(timeout=60)
 def get_service_ticket(ticket_id):
     """Get a specific service ticket by ID"""
     try:
@@ -78,6 +82,7 @@ def get_service_ticket(ticket_id):
 
 # ASSIGN MECHANIC - Add a mechanic to a service ticket
 @service_tickets_bp.route('/<int:ticket_id>/assign-mechanic/<int:mechanic_id>', methods=['PUT'])
+@limiter.limit("30 per minute")
 def assign_mechanic(ticket_id, mechanic_id):
     """Assign a mechanic to a service ticket"""
     try:
@@ -111,6 +116,7 @@ def assign_mechanic(ticket_id, mechanic_id):
 
 # REMOVE MECHANIC - Remove a mechanic from a service ticket
 @service_tickets_bp.route('/<int:ticket_id>/remove-mechanic/<int:mechanic_id>', methods=['PUT'])
+@limiter.limit("30 per minute")
 def remove_mechanic(ticket_id, mechanic_id):
     """Remove a mechanic from a service ticket"""
     try:
@@ -144,6 +150,7 @@ def remove_mechanic(ticket_id, mechanic_id):
 
 # UPDATE - Update an existing service ticket
 @service_tickets_bp.route('/<int:ticket_id>', methods=['PUT'])
+@limiter.limit("20 per minute")
 def update_service_ticket(ticket_id):
     """Update an existing service ticket"""
     try:
@@ -179,6 +186,7 @@ def update_service_ticket(ticket_id):
 
 # DELETE - Delete a service ticket
 @service_tickets_bp.route('/<int:ticket_id>', methods=['DELETE'])
+@limiter.limit("5 per minute")
 def delete_service_ticket(ticket_id):
     """Delete a service ticket"""
     try:

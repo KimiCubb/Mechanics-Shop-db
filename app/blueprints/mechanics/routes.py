@@ -3,6 +3,7 @@ from app.blueprints.mechanics import mechanics_bp
 from app.blueprints.mechanics.schemas import mechanic_schema, mechanics_schema
 from marshmallow import ValidationError
 from app.models import db, Mechanic
+from app.extensions import limiter, cache
 
 
 # ============================================
@@ -11,6 +12,7 @@ from app.models import db, Mechanic
 
 # CREATE - Add a new mechanic
 @mechanics_bp.route('/', methods=['POST'])
+@limiter.limit("10 per minute")
 def create_mechanic():
     """Create a new mechanic"""
     try:
@@ -44,6 +46,7 @@ def create_mechanic():
 
 # READ - Get all mechanics
 @mechanics_bp.route('/', methods=['GET'])
+@cache.cached(timeout=60)
 def get_mechanics():
     """Get all mechanics"""
     try:
@@ -60,6 +63,7 @@ def get_mechanics():
 
 # READ - Get a specific mechanic by ID
 @mechanics_bp.route('/<int:mechanic_id>', methods=['GET'])
+@cache.cached(timeout=60)
 def get_mechanic(mechanic_id):
     """Get a specific mechanic by ID"""
     try:
@@ -79,6 +83,7 @@ def get_mechanic(mechanic_id):
 
 # UPDATE - Update an existing mechanic
 @mechanics_bp.route('/<int:mechanic_id>', methods=['PUT'])
+@limiter.limit("20 per minute")
 def update_mechanic(mechanic_id):
     """Update an existing mechanic"""
     try:
@@ -115,6 +120,7 @@ def update_mechanic(mechanic_id):
 
 # DELETE - Delete a mechanic
 @mechanics_bp.route('/<int:mechanic_id>', methods=['DELETE'])
+@limiter.limit("5 per minute")
 def delete_mechanic(mechanic_id):
     """Delete a mechanic"""
     try:

@@ -3,6 +3,7 @@ from app.blueprints.vehicles import vehicles_bp
 from app.blueprints.vehicles.schemas import vehicle_schema, vehicles_schema
 from marshmallow import ValidationError
 from app.models import db, Vehicle, Customer
+from app.extensions import limiter, cache
 
 
 # ============================================
@@ -11,6 +12,7 @@ from app.models import db, Vehicle, Customer
 
 # CREATE - Add a new vehicle
 @vehicles_bp.route('/', methods=['POST'])
+@limiter.limit("10 per minute")
 def create_vehicle():
     """Create a new vehicle"""
     try:
@@ -54,6 +56,7 @@ def create_vehicle():
 
 # READ - Get all vehicles
 @vehicles_bp.route('/', methods=['GET'])
+@cache.cached(timeout=60)
 def get_vehicles():
     """Get all vehicles"""
     try:
@@ -70,6 +73,7 @@ def get_vehicles():
 
 # READ - Get a specific vehicle by ID
 @vehicles_bp.route('/<int:vehicle_id>', methods=['GET'])
+@cache.cached(timeout=60)
 def get_vehicle(vehicle_id):
     """Get a specific vehicle by ID"""
     try:
@@ -89,6 +93,7 @@ def get_vehicle(vehicle_id):
 
 # READ - Get all vehicles for a specific customer
 @vehicles_bp.route('/customer/<int:customer_id>', methods=['GET'])
+@cache.cached(timeout=60)
 def get_customer_vehicles(customer_id):
     """Get all vehicles for a specific customer"""
     try:
@@ -109,6 +114,7 @@ def get_customer_vehicles(customer_id):
 
 # UPDATE - Update an existing vehicle
 @vehicles_bp.route('/<int:vehicle_id>', methods=['PUT'])
+@limiter.limit("20 per minute")
 def update_vehicle(vehicle_id):
     """Update an existing vehicle"""
     try:
@@ -147,6 +153,7 @@ def update_vehicle(vehicle_id):
 
 # DELETE - Delete a vehicle
 @vehicles_bp.route('/<int:vehicle_id>', methods=['DELETE'])
+@limiter.limit("5 per minute")
 def delete_vehicle(vehicle_id):
     """Delete a vehicle"""
     try:

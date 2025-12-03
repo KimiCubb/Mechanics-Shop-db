@@ -104,6 +104,7 @@ python app.py
 ```
 
 You should see:
+
 ```
 ✅ Database tables created successfully!
 🚀 Starting Mechanic Shop API...
@@ -122,86 +123,90 @@ You should see:
 
 ### Customers `/customers`
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/customers/` | Get all customers |
-| `GET` | `/customers/<id>` | Get customer by ID |
-| `POST` | `/customers/` | Create new customer |
-| `PUT` | `/customers/<id>` | Update customer |
-| `DELETE` | `/customers/<id>` | Delete customer |
+| Method   | Endpoint          | Description         |
+| -------- | ----------------- | ------------------- |
+| `GET`    | `/customers/`     | Get all customers   |
+| `GET`    | `/customers/<id>` | Get customer by ID  |
+| `POST`   | `/customers/`     | Create new customer |
+| `PUT`    | `/customers/<id>` | Update customer     |
+| `DELETE` | `/customers/<id>` | Delete customer     |
 
 **Create Customer Request Body:**
+
 ```json
 {
-    "name": "John Doe",
-    "phone": "555-123-4567",
-    "email": "johndoe@email.com",
-    "address": "123 Main Street, City, ST 12345"
+  "name": "John Doe",
+  "phone": "555-123-4567",
+  "email": "johndoe@email.com",
+  "address": "123 Main Street, City, ST 12345"
 }
 ```
 
 ### Vehicles `/vehicles`
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/vehicles/` | Get all vehicles |
-| `GET` | `/vehicles/<id>` | Get vehicle by ID |
-| `GET` | `/vehicles/customer/<id>` | Get customer's vehicles |
-| `POST` | `/vehicles/` | Create new vehicle |
-| `PUT` | `/vehicles/<id>` | Update vehicle |
-| `DELETE` | `/vehicles/<id>` | Delete vehicle |
+| Method   | Endpoint                  | Description             |
+| -------- | ------------------------- | ----------------------- |
+| `GET`    | `/vehicles/`              | Get all vehicles        |
+| `GET`    | `/vehicles/<id>`          | Get vehicle by ID       |
+| `GET`    | `/vehicles/customer/<id>` | Get customer's vehicles |
+| `POST`   | `/vehicles/`              | Create new vehicle      |
+| `PUT`    | `/vehicles/<id>`          | Update vehicle          |
+| `DELETE` | `/vehicles/<id>`          | Delete vehicle          |
 
 **Create Vehicle Request Body:**
+
 ```json
 {
-    "customer_id": 1,
-    "make": "Toyota",
-    "model": "Camry",
-    "year": 2022,
-    "vin": "1HGBH41JXMN109186"
+  "customer_id": 1,
+  "make": "Toyota",
+  "model": "Camry",
+  "year": 2022,
+  "vin": "1HGBH41JXMN109186"
 }
 ```
 
 ### Mechanics `/mechanics`
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/mechanics/` | Get all mechanics |
-| `GET` | `/mechanics/<id>` | Get mechanic by ID |
-| `POST` | `/mechanics/` | Create new mechanic |
-| `PUT` | `/mechanics/<id>` | Update mechanic |
-| `DELETE` | `/mechanics/<id>` | Delete mechanic |
+| Method   | Endpoint          | Description         |
+| -------- | ----------------- | ------------------- |
+| `GET`    | `/mechanics/`     | Get all mechanics   |
+| `GET`    | `/mechanics/<id>` | Get mechanic by ID  |
+| `POST`   | `/mechanics/`     | Create new mechanic |
+| `PUT`    | `/mechanics/<id>` | Update mechanic     |
+| `DELETE` | `/mechanics/<id>` | Delete mechanic     |
 
 **Create Mechanic Request Body:**
+
 ```json
 {
-    "name": "Mike Johnson",
-    "email": "mike.johnson@mechanicshop.com",
-    "address": "456 Workshop Lane, City, ST 12345",
-    "phone": "555-987-6543",
-    "salary": 55000.00
+  "name": "Mike Johnson",
+  "email": "mike.johnson@mechanicshop.com",
+  "address": "456 Workshop Lane, City, ST 12345",
+  "phone": "555-987-6543",
+  "salary": 55000.0
 }
 ```
 
 ### Service Tickets `/service-tickets`
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/service-tickets/` | Get all service tickets |
-| `GET` | `/service-tickets/<id>` | Get ticket by ID |
-| `POST` | `/service-tickets/` | Create new ticket |
-| `PUT` | `/service-tickets/<id>` | Update ticket |
-| `PUT` | `/service-tickets/<id>/assign-mechanic/<mechanic_id>` | Assign mechanic |
-| `PUT` | `/service-tickets/<id>/remove-mechanic/<mechanic_id>` | Remove mechanic |
-| `DELETE` | `/service-tickets/<id>` | Delete ticket |
+| Method   | Endpoint                                              | Description             |
+| -------- | ----------------------------------------------------- | ----------------------- |
+| `GET`    | `/service-tickets/`                                   | Get all service tickets |
+| `GET`    | `/service-tickets/<id>`                               | Get ticket by ID        |
+| `POST`   | `/service-tickets/`                                   | Create new ticket       |
+| `PUT`    | `/service-tickets/<id>`                               | Update ticket           |
+| `PUT`    | `/service-tickets/<id>/assign-mechanic/<mechanic_id>` | Assign mechanic         |
+| `PUT`    | `/service-tickets/<id>/remove-mechanic/<mechanic_id>` | Remove mechanic         |
+| `DELETE` | `/service-tickets/<id>`                               | Delete ticket           |
 
 **Create Service Ticket Request Body:**
+
 ```json
 {
-    "vehicle_id": 1,
-    "description": "Oil change, tire rotation, and brake inspection",
-    "status": "Open",
-    "total_cost": 150.00
+  "vehicle_id": 1,
+  "description": "Oil change, tire rotation, and brake inspection",
+  "status": "Open",
+  "total_cost": 150.0
 }
 ```
 
@@ -215,25 +220,27 @@ CUSTOMER 1 ───< VEHICLE 1 ───< SERVICE_TICKET >───< SERVICE_TI
 
 ### Tables
 
-| Table | Primary Key | Description |
-|-------|-------------|-------------|
-| `customer` | `customer_id` | Customer information |
-| `vehicle` | `vehicle_id` | Vehicle details (FK: customer_id) |
-| `service_ticket` | `service_ticket_id` | Service records (FK: vehicle_id) |
-| `mechanic` | `mechanic_id` | Mechanic profiles |
-| `service_ticket_mechanic` | Composite | Junction table (many-to-many) |
+| Table                     | Primary Key         | Description                       |
+| ------------------------- | ------------------- | --------------------------------- |
+| `customer`                | `customer_id`       | Customer information              |
+| `vehicle`                 | `vehicle_id`        | Vehicle details (FK: customer_id) |
+| `service_ticket`          | `service_ticket_id` | Service records (FK: vehicle_id)  |
+| `mechanic`                | `mechanic_id`       | Mechanic profiles                 |
+| `service_ticket_mechanic` | Composite           | Junction table (many-to-many)     |
 
 ## 🧪 Testing with Postman
 
 A Postman collection is included in the repository: `Mechanics Shop API.postman_collection.json`
 
 ### Import Collection:
+
 1. Open Postman
 2. Click **Import**
 3. Select the `Mechanics Shop API.postman_collection.json` file
 4. Start testing the endpoints!
 
 ### Test Order Recommendation:
+
 1. Create a Customer
 2. Create a Vehicle (requires customer_id)
 3. Create a Mechanic
@@ -247,4 +254,5 @@ This project is for educational purposes.
 ## 👤 Author
 
 **Kimberly Cirillo**
+
 - GitHub: [@KimiCubb](https://github.com/KimiCubb)

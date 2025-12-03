@@ -1,6 +1,6 @@
-from flask import Flask
+from flask import Flask, jsonify
 from app.models import db
-from app.extensions import ma
+from app.extensions import ma, limiter, cache
 from app.blueprints.customers import customers_bp
 from app.blueprints.vehicles import vehicles_bp
 from app.blueprints.mechanics import mechanics_bp
@@ -13,12 +13,24 @@ def create_app(config_name):
     # Initialize extensions
     db.init_app(app)
     ma.init_app(app)
+    limiter.init_app(app)
+    cache.init_app(app)
 
     # Register blueprints
     app.register_blueprint(customers_bp, url_prefix='/customers')
     app.register_blueprint(vehicles_bp, url_prefix='/vehicles')
     app.register_blueprint(mechanics_bp, url_prefix='/mechanics')
     app.register_blueprint(service_tickets_bp, url_prefix='/service-tickets')
+
+    # Health check endpoint (exempt from rate limiting)
+    @app.route('/health', methods=['GET'])
+    @limiter.exempt
+    def health_check():
+        """Health check endpoint for monitoring"""
+        return jsonify({
+            'status': 'healthy',
+            'message': 'Mechanic Shop API is running'
+        }), 200
 
     return app
 
