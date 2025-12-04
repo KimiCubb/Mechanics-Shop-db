@@ -24,3 +24,9 @@ jobs:
 
       - name: Run tests
         run: python -m unittest discover -s tests -p 'test_*.py' -v
+
+      - name: Deploy to production
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          service-id: ${{ secrets.RENDER_SERVICE_ID }}
+          api-key: ${{ secrets.RENDER_API_KEY }}
