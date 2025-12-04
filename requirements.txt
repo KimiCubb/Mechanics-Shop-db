@@ -5,6 +5,8 @@ flask-marshmallow>=1.2.0
 marshmallow-sqlalchemy>=0.30.0
 flask-limiter>=3.5.0
 flask-caching>=2.1.0
+flask-swagger-ui>=4.11.1
+
 
 # Authentication
 python-jose>=3.3.0

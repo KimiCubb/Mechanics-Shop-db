@@ -18,19 +18,13 @@ def create_part():
     try:
         data = request.get_json()
         
-        # Validate required fields
-        if not all(key in data for key in ['name', 'price']):
-            return jsonify({'error': 'Missing required fields: name, price'}), 400
+        # Validate using Marshmallow schema
+        errors = inventory_schema.validate(data)
+        if errors:
+            return jsonify({'error': 'Validation failed', 'details': errors}), 400
         
-        # Validate price is positive
-        if data['price'] < 0:
-            return jsonify({'error': 'Price must be a positive value'}), 400
-        
-        # Create new part
-        new_part = Inventory(
-            name=data['name'],
-            price=data['price']
-        )
+        # Create new part using schema load
+        new_part = inventory_schema.load(data)
         
         db.session.add(new_part)
         db.session.commit()
@@ -40,6 +34,8 @@ def create_part():
             'part': inventory_schema.dump(new_part)
         }), 201
     
+    except ValidationError as e:
+        return jsonify({'error': 'Validation failed', 'details': e.messages}), 400
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 400

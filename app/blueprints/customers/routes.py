@@ -5,6 +5,7 @@ from marshmallow import ValidationError
 from app.models import db, Customer, Vehicle, ServiceTicket
 from app.extensions import limiter, cache
 from app.utils.util import encode_token, token_required
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 # ============================================
@@ -33,7 +34,8 @@ def login():
         # Query customer by email
         customer = Customer.query.filter_by(email=email).first()
         
-        if customer and customer.password == password:
+        # Use check_password_hash for secure password comparison
+        if customer and check_password_hash(customer.password, password):
             # Generate token using customer_id
             auth_token = encode_token(customer.customer_id)
             
@@ -120,13 +122,13 @@ def create_customer():
         if existing:
             return jsonify({'error': 'Email already registered'}), 400
         
-        # Create new customer
+        # Create new customer with hashed password
         new_customer = Customer(
             name=data['name'],
             phone=data['phone'],
             email=data['email'],
             address=data['address'],
-            password=data['password']  # In production, hash this!
+            password=generate_password_hash(data['password'])  # Hash the password!
         )
         
         db.session.add(new_customer)
@@ -242,7 +244,7 @@ def update_customer(token_customer_id, customer_id):
         if 'address' in data:
             customer.address = data['address']
         if 'password' in data:
-            customer.password = data['password']  # In production, hash this!
+            customer.password = generate_password_hash(data['password'])  # Hash the new password
         
         db.session.commit()
         

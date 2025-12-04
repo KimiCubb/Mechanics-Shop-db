@@ -25,9 +25,10 @@ class DevelopmentConfig(Config):
 
 class TestingConfig(Config):
     """Testing configuration"""
+    DEBUG = True
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
-    CACHE_TYPE = "NullCache"  # Disable caching during tests
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///testing.db'
+    CACHE_TYPE = "SimpleCache"  # Disable caching during tests
     RATELIMIT_ENABLED = False  # Disable rate limiting during tests
 
 class ProductionConfig(Config):
