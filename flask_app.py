@@ -8,6 +8,10 @@ config_name = 'DevelopmentConfig' if env == 'development' else 'ProductionConfig
 
 app = create_app(config_name)
 
+# Export 'application' for Gunicorn (production server)
+# Gunicorn looks for 'application' as the WSGI entry point
+application = app
+
 # Create tables only when running directly
 if __name__ == '__main__':
     with app.app_context():
