@@ -13,6 +13,10 @@ python-jose>=3.3.0
 
 # Database
 mysql-connector-python>=8.2.0
+psycopg2-binary>=2.9.0
 
-# Development
-python-dotenv>=1.0.0
+# Production/Deployment
+gunicorn>=21.0.0
+
+# Development/Testing
+pyyaml>=6.0

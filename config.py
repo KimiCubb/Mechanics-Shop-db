@@ -7,6 +7,7 @@ class Config:
     JSON_SORT_KEYS = False
     
     # Rate Limiting
+    RATELIMIT_ENABLED = True
     RATELIMIT_STORAGE_URI = "memory://"
     
     # Caching
@@ -28,13 +29,18 @@ class TestingConfig(Config):
     DEBUG = True
     TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///testing.db'
-    CACHE_TYPE = "SimpleCache"  # Disable caching during tests
+    CACHE_TYPE = "SimpleCache"  # Lightweight in-memory cache for tests
     RATELIMIT_ENABLED = False  # Disable rate limiting during tests
 
 class ProductionConfig(Config):
     """Production configuration"""
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
-    CACHE_TYPE = "RedisCache"  # Use Redis in production
-    CACHE_REDIS_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379/0')
-    RATELIMIT_STORAGE_URI = os.environ.get('REDIS_URL', 'redis://localhost:6379/1')
+    # Database URI should be set via environment variable in production
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or os.environ.get('SQLALCHEMY_DATABASE_URI')
+    
+    # Caching with Redis
+    CACHE_TYPE = "RedisCache"
+    CACHE_REDIS_URL = os.environ.get('CACHE_REDIS_URL', 'redis://localhost:6379/0')
+    
+    # Rate limiting with Redis
+    RATELIMIT_STORAGE_URI = os.environ.get('RATELIMIT_STORAGE_URI', 'redis://localhost:6379/1')

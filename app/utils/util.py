@@ -1,12 +1,12 @@
 from datetime import datetime, timedelta, timezone
 from jose import jwt
-import jose
+from jose.exceptions import ExpiredSignatureError, JWTError
 from functools import wraps
 from flask import request, jsonify
 import os
 
-# Use environment variable for SECRET_KEY (more secure)
-SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'dev-secret-key-change-in-production')
+# Use environment variable for SECRET_KEY
+SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
 
 
 def encode_token(customer_id):
@@ -49,9 +49,9 @@ def token_required(f):
             data = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
             customer_id = int(data['sub'])  # Convert back to int for database queries
             
-        except jose.exceptions.ExpiredSignatureError:
+        except ExpiredSignatureError:
             return jsonify({'message': 'Token has expired! Please login again.'}), 401
-        except jose.exceptions.JWTError:
+        except JWTError:
             return jsonify({'message': 'Invalid token!'}), 401
 
         # Pass customer_id to the decorated function

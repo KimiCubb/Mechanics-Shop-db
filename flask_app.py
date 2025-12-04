@@ -1,14 +1,19 @@
+import os
 from app import create_app
 from app.models import db
 
-app = create_app('DevelopmentConfig')
+# Read environment from .env (defaults to 'development')
+env = os.environ.get('FLASK_ENV', 'development')
+config_name = 'DevelopmentConfig' if env == 'development' else 'ProductionConfig'
 
-# Create tables within application context
-with app.app_context():
-    db.create_all()
-    print("✅ Database tables created successfully!")
+app = create_app(config_name)
 
+# Create tables only when running directly
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
+        print("✅ Database tables created successfully!")
+    
     print("🚀 Starting Mechanic Shop API...")
     print("=" * 60)
     print("📍 Server running at: http://127.0.0.1:5000")
@@ -30,5 +35,5 @@ if __name__ == '__main__':
     print("   • POST /service-tickets/<id>/add-part  - Add part to ticket")
     print("   • GET  /customers/?page=1&per_page=10  - Paginated customers")
     print("=" * 60)
-    app.run(debug=True)
+    app.run(debug=os.environ.get('FLASK_DEBUG', 'False') == 'True')
 

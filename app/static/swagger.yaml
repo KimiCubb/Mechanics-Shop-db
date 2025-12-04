@@ -1162,7 +1162,7 @@ definitions:
   Part:
     type: "object"
     properties:
-      part_id:
+      id:
         type: "integer"
         example: 1
       name:

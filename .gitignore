@@ -3,6 +3,7 @@ venv/
 env/
 .venv/
 
+
 # Python
 __pycache__/
 *.py[cod]
@@ -38,3 +39,24 @@ build/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Flask
+instance/
+.webassets-cache
+
+# Environment files (additional patterns)
+.env.*.local
+*.env
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDEs (additional)
+*.sublime-project
+*.sublime-workspace
+
+# macOS extended
+.AppleDouble
+.LSOverride
