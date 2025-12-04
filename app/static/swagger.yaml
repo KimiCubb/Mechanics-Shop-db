@@ -6,10 +6,9 @@ info:
   contact:
     name: "API Support"
     url: "https://github.com/KimiCubb/Mechanics-Shop-db"
-host: "127.0.0.1:5000"
+host: "mechanics-shop-db.onrender.com"
 basePath: ""
 schemes:
-  - "http"
   - "https"
 consumes:
   - "application/json"

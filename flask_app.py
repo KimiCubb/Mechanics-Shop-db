@@ -1,4 +1,5 @@
 import os
+from flask import redirect
 from app import create_app
 from app.models import db
 
@@ -8,8 +9,10 @@ config_name = 'DevelopmentConfig' if env == 'development' else 'ProductionConfig
 
 app = create_app(config_name)
 
-# Export 'application' for Gunicorn (production server)
-# Gunicorn looks for 'application' as the WSGI entry point
+@app.route('/', methods=['GET'])
+def index():
+    return redirect('/api/docs')
+
 application = app
 
 # Create tables only when running directly
