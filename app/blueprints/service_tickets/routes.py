@@ -1,9 +1,12 @@
 from flask import request, jsonify
 from app.blueprints.service_tickets import service_tickets_bp
-from app.blueprints.service_tickets.schemas import service_ticket_schema, service_tickets_schema
-from marshmallow import ValidationError
+from app.blueprints.service_tickets.schemas import (
+    service_ticket_schema, service_tickets_schema,
+    service_ticket_create_schema, service_ticket_update_schema
+)
 from app.models import db, ServiceTicket, Mechanic, Inventory, ServiceTicketPart
 from app.extensions import limiter, cache
+from app.utils.util import validate_request, paginated_response
 
 
 # ============================================
@@ -13,48 +16,69 @@ from app.extensions import limiter, cache
 # CREATE - Add a new service ticket
 @service_tickets_bp.route('/', methods=['POST'])
 @limiter.limit("10 per minute")
-def create_service_ticket():
-    """Create a new service ticket"""
+@validate_request(service_ticket_create_schema)
+def create_service_ticket(validated_data):
+    """
+    Create a new service ticket.
+    Requires: vehicle_id, description
+    Optional: status (default: 'Open'), total_cost (default: 0.0)
+    """
     try:
-        data = request.get_json()
-        
-        # Validate required fields
-        if not all(key in data for key in ['vehicle_id', 'description']):
-            return jsonify({'error': 'Missing required fields: vehicle_id, description'}), 400
-        
         # Create new service ticket
         new_ticket = ServiceTicket(
-            vehicle_id=data['vehicle_id'],
-            description=data['description'],
-            status=data.get('status', 'Open'),
-            total_cost=data.get('total_cost', 0.0)
+            vehicle_id=validated_data['vehicle_id'],
+            description=validated_data['description'],
+            status=validated_data.get('status', 'Open'),
+            total_cost=validated_data.get('total_cost', 0.0)
         )
         
         db.session.add(new_ticket)
         db.session.commit()
         
         return jsonify({
+            'status': 'success',
             'message': 'Service ticket created successfully',
             'service_ticket': service_ticket_schema.dump(new_ticket)
         }), 201
     
     except Exception as e:
         db.session.rollback()
-        return jsonify({'error': str(e)}), 400
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 400
 
 
 # READ - Get all service tickets
 @service_tickets_bp.route('/', methods=['GET'])
-@cache.cached(timeout=60)
+@cache.cached(timeout=60, query_string=True)
 def get_service_tickets():
-    """Get all service tickets"""
+    """
+    Get all service tickets with pagination.
+    Query params:
+        - page: Page number (default: 1)
+        - per_page: Items per page (default: 10, max: 100)
+    """
     try:
-        tickets = ServiceTicket.query.all()
-        return jsonify({
-            'message': 'Service tickets retrieved successfully',
-            'count': len(tickets),
-            'service_tickets': service_tickets_schema.dump(tickets)
-        }), 200
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 10, type=int)
+        
+        # Limit per_page to prevent excessive queries
+        per_page = min(per_page, 100)
+        
+        # Query with pagination
+        pagination = ServiceTicket.query.paginate(
+            page=page,
+            per_page=per_page,
+            error_out=False
+        )
+        
+        return jsonify(paginated_response(
+            service_tickets_schema,
+            pagination,
+            'Service tickets retrieved successfully',
+            data_key='service_tickets'
+        )), 200
     
     except Exception as e:
         return jsonify({'error': str(e)}), 400
@@ -151,37 +175,47 @@ def remove_mechanic(ticket_id, mechanic_id):
 # UPDATE - Update an existing service ticket
 @service_tickets_bp.route('/<int:ticket_id>', methods=['PUT'])
 @limiter.limit("20 per minute")
-def update_service_ticket(ticket_id):
-    """Update an existing service ticket"""
+@validate_request(service_ticket_update_schema)
+def update_service_ticket(validated_data, ticket_id):
+    """
+    Update an existing service ticket.
+    Optional fields: vehicle_id, description, status, date_out, total_cost
+    """
     try:
         ticket = db.session.get(ServiceTicket, ticket_id)
         
         if not ticket:
-            return jsonify({'error': f'Service ticket with ID {ticket_id} not found'}), 404
-        
-        data = request.get_json()
+            return jsonify({
+                'status': 'error',
+                'message': f'Service ticket with ID {ticket_id} not found'
+            }), 404
         
         # Update fields if provided
-        if 'description' in data:
-            ticket.description = data['description']
-        if 'status' in data:
-            ticket.status = data['status']
-        if 'total_cost' in data:
-            ticket.total_cost = data['total_cost']
-        if 'date_out' in data:
-            from datetime import datetime
-            ticket.date_out = datetime.fromisoformat(data['date_out'])
+        if 'vehicle_id' in validated_data:
+            ticket.vehicle_id = validated_data['vehicle_id']
+        if 'description' in validated_data:
+            ticket.description = validated_data['description']
+        if 'status' in validated_data:
+            ticket.status = validated_data['status']
+        if 'total_cost' in validated_data:
+            ticket.total_cost = validated_data['total_cost']
+        if 'date_out' in validated_data:
+            ticket.date_out = validated_data['date_out']
         
         db.session.commit()
         
         return jsonify({
+            'status': 'success',
             'message': 'Service ticket updated successfully',
             'service_ticket': service_ticket_schema.dump(ticket)
         }), 200
     
     except Exception as e:
         db.session.rollback()
-        return jsonify({'error': str(e)}), 400
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 400
 
 
 # DELETE - Delete a service ticket

@@ -74,6 +74,7 @@ class Vehicle(db.Model):
     model = db.Column(String(50), nullable=False)
     year = db.Column(Integer, nullable=False)
     vin = db.Column(String(17), unique=True, nullable=False)
+    license_plate = db.Column(String(20), unique=True, nullable=True)
     
     # Relationships
     customer = relationship('Customer', back_populates='vehicles')

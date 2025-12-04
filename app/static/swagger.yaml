@@ -1107,7 +1107,6 @@ definitions:
       - make
       - model
       - vin
-      - license_plate
     properties:
       customer_id:
         type: "integer"

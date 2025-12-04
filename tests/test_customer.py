@@ -95,8 +95,9 @@ class TestCustomer(unittest.TestCase):
         # Get all customers
         response = self.client.get('/customers/?page=1&per_page=10')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json['page'], 1)
-        self.assertEqual(response.json['per_page'], 10)
+        self.assertEqual(response.json['status'], 'success')
+        self.assertEqual(response.json['pagination']['page'], 1)
+        self.assertEqual(response.json['pagination']['per_page'], 10)
         self.assertGreaterEqual(len(response.json['customers']), 3)
 
     def test_get_single_customer(self):

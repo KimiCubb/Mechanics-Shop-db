@@ -1,9 +1,12 @@
 from flask import request, jsonify
 from app.blueprints.mechanics import mechanics_bp
-from app.blueprints.mechanics.schemas import mechanic_schema, mechanics_schema
-from marshmallow import ValidationError
+from app.blueprints.mechanics.schemas import (
+    mechanic_schema, mechanics_schema,
+    mechanic_create_schema, mechanic_update_schema
+)
 from app.models import db, Mechanic, service_ticket_mechanic
 from app.extensions import limiter, cache
+from app.utils.util import validate_request, paginated_response
 from sqlalchemy import func
 
 
@@ -14,49 +17,69 @@ from sqlalchemy import func
 # CREATE - Add a new mechanic
 @mechanics_bp.route('/', methods=['POST'])
 @limiter.limit("10 per minute")
-def create_mechanic():
-    """Create a new mechanic"""
+@validate_request(mechanic_create_schema)
+def create_mechanic(validated_data):
+    """
+    Create a new mechanic.
+    Requires: name, email, address, phone, salary (must be >= 0)
+    """
     try:
-        data = request.get_json()
-        
-        # Validate required fields
-        if not all(key in data for key in ['name', 'email', 'address', 'phone', 'salary']):
-            return jsonify({'error': 'Missing required fields: name, email, address, phone, salary'}), 400
-        
         # Create new mechanic
         new_mechanic = Mechanic(
-            name=data['name'],
-            email=data['email'],
-            address=data['address'],
-            phone=data['phone'],
-            salary=data['salary']
+            name=validated_data['name'],
+            email=validated_data['email'],
+            address=validated_data['address'],
+            phone=validated_data['phone'],
+            salary=validated_data['salary']
         )
         
         db.session.add(new_mechanic)
         db.session.commit()
         
         return jsonify({
+            'status': 'success',
             'message': 'Mechanic created successfully',
             'mechanic': mechanic_schema.dump(new_mechanic)
         }), 201
     
     except Exception as e:
         db.session.rollback()
-        return jsonify({'error': str(e)}), 400
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 400
 
 
 # READ - Get all mechanics
 @mechanics_bp.route('/', methods=['GET'])
-@cache.cached(timeout=60)
+@cache.cached(timeout=60, query_string=True)
 def get_mechanics():
-    """Get all mechanics"""
+    """
+    Get all mechanics with pagination.
+    Query params:
+        - page: Page number (default: 1)
+        - per_page: Items per page (default: 10, max: 100)
+    """
     try:
-        mechanics = Mechanic.query.all()
-        return jsonify({
-            'message': 'Mechanics retrieved successfully',
-            'count': len(mechanics),
-            'mechanics': mechanics_schema.dump(mechanics)
-        }), 200
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 10, type=int)
+        
+        # Limit per_page to prevent excessive queries
+        per_page = min(per_page, 100)
+        
+        # Query with pagination
+        pagination = Mechanic.query.paginate(
+            page=page,
+            per_page=per_page,
+            error_out=False
+        )
+        
+        return jsonify(paginated_response(
+            mechanics_schema,
+            pagination,
+            'Mechanics retrieved successfully',
+            data_key='mechanics'
+        )), 200
     
     except Exception as e:
         return jsonify({'error': str(e)}), 400
@@ -85,38 +108,47 @@ def get_mechanic(mechanic_id):
 # UPDATE - Update an existing mechanic
 @mechanics_bp.route('/<int:mechanic_id>', methods=['PUT'])
 @limiter.limit("20 per minute")
-def update_mechanic(mechanic_id):
-    """Update an existing mechanic"""
+@validate_request(mechanic_update_schema)
+def update_mechanic(validated_data, mechanic_id):
+    """
+    Update an existing mechanic.
+    Optional fields: name, email, address, phone, salary (must be >= 0)
+    """
     try:
         mechanic = db.session.get(Mechanic, mechanic_id)
         
         if not mechanic:
-            return jsonify({'error': f'Mechanic with ID {mechanic_id} not found'}), 404
-        
-        data = request.get_json()
+            return jsonify({
+                'status': 'error',
+                'message': f'Mechanic with ID {mechanic_id} not found'
+            }), 404
         
         # Update fields if provided
-        if 'name' in data:
-            mechanic.name = data['name']
-        if 'email' in data:
-            mechanic.email = data['email']
-        if 'address' in data:
-            mechanic.address = data['address']
-        if 'phone' in data:
-            mechanic.phone = data['phone']
-        if 'salary' in data:
-            mechanic.salary = data['salary']
+        if 'name' in validated_data:
+            mechanic.name = validated_data['name']
+        if 'email' in validated_data:
+            mechanic.email = validated_data['email']
+        if 'address' in validated_data:
+            mechanic.address = validated_data['address']
+        if 'phone' in validated_data:
+            mechanic.phone = validated_data['phone']
+        if 'salary' in validated_data:
+            mechanic.salary = validated_data['salary']
         
         db.session.commit()
         
         return jsonify({
+            'status': 'success',
             'message': 'Mechanic updated successfully',
             'mechanic': mechanic_schema.dump(mechanic)
         }), 200
     
     except Exception as e:
         db.session.rollback()
-        return jsonify({'error': str(e)}), 400
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 400
 
 
 # DELETE - Delete a mechanic

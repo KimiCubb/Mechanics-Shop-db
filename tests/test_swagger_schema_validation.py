@@ -9,11 +9,11 @@ import yaml
 import json
 from pathlib import Path
 from app import create_app
-from app.blueprints.customers.schemas import CustomerSchema, LoginSchema
-from app.blueprints.vehicles.schemas import VehicleSchema
-from app.blueprints.mechanics.schemas import MechanicSchema
-from app.blueprints.service_tickets.schemas import ServiceTicketSchema
-from app.blueprints.inventory.schemas import InventorySchema
+from app.blueprints.customers.schemas import CustomerSchema, CustomerCreateSchema, LoginSchema
+from app.blueprints.vehicles.schemas import VehicleSchema, VehicleCreateSchema
+from app.blueprints.mechanics.schemas import MechanicSchema, MechanicCreateSchema
+from app.blueprints.service_tickets.schemas import ServiceTicketSchema, ServiceTicketCreateSchema
+from app.blueprints.inventory.schemas import InventorySchema, InventoryCreateSchema
 
 
 class SwaggerSchemaValidationTest(unittest.TestCase):
@@ -47,13 +47,13 @@ class SwaggerSchemaValidationTest(unittest.TestCase):
     def test_customer_schema_fields(self):
         """Verify CustomerCreate fields match Swagger CustomerCreate definition"""
         swagger_def = self.get_swagger_definition('CustomerCreate')
-        schema = CustomerSchema()
+        schema = CustomerCreateSchema()
         
         # Check required fields match
         swagger_required = set(swagger_def.get('required', []))
         schema_required = {
             name for name, field in schema.fields.items()
-            if field.required and name != 'customer_id'
+            if field.required
         }
         
         self.assertEqual(
@@ -76,12 +76,12 @@ class SwaggerSchemaValidationTest(unittest.TestCase):
     def test_vehicle_schema_fields(self):
         """Verify VehicleCreate fields match Swagger VehicleCreate definition"""
         swagger_def = self.get_swagger_definition('VehicleCreate')
-        schema = VehicleSchema()
+        schema = VehicleCreateSchema()
         
         swagger_required = set(swagger_def.get('required', []))
         schema_required = {
             name for name, field in schema.fields.items()
-            if field.required and name != 'vehicle_id'
+            if field.required
         }
         
         self.assertEqual(
@@ -109,12 +109,12 @@ class SwaggerSchemaValidationTest(unittest.TestCase):
     def test_mechanic_schema_fields(self):
         """Verify MechanicCreate fields match Swagger MechanicCreate definition"""
         swagger_def = self.get_swagger_definition('MechanicCreate')
-        schema = MechanicSchema()
+        schema = MechanicCreateSchema()
         
         swagger_required = set(swagger_def.get('required', []))
         schema_required = {
             name for name, field in schema.fields.items()
-            if field.required and name != 'mechanic_id'
+            if field.required
         }
         
         self.assertEqual(
@@ -127,12 +127,12 @@ class SwaggerSchemaValidationTest(unittest.TestCase):
     def test_service_ticket_schema_fields(self):
         """Verify ServiceTicketCreate fields match Swagger ServiceTicketCreate definition"""
         swagger_def = self.get_swagger_definition('ServiceTicketCreate')
-        schema = ServiceTicketSchema()
+        schema = ServiceTicketCreateSchema()
         
         swagger_required = set(swagger_def.get('required', []))
         schema_required = {
             name for name, field in schema.fields.items()
-            if field.required and name not in ['service_ticket_id', 'date_in', 'date_out']
+            if field.required
         }
         
         self.assertEqual(

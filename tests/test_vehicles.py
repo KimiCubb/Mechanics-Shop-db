@@ -97,13 +97,17 @@ class TestVehicles(unittest.TestCase):
         
         response = self.client.get('/vehicles/')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json['count'], 3)
+        self.assertEqual(response.json['status'], 'success')
+        self.assertEqual(len(response.json['vehicles']), 3)
+        self.assertIn('pagination', response.json)
     
     def test_get_vehicles_empty(self):
         """Test retrieving vehicles when none exist"""
         response = self.client.get('/vehicles/')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json['count'], 0)
+        self.assertEqual(response.json['status'], 'success')
+        self.assertEqual(len(response.json['vehicles']), 0)
+        self.assertEqual(response.json['pagination']['total_items'], 0)
     
     def test_get_single_vehicle(self):
         """Test retrieving a specific vehicle by ID"""
@@ -141,7 +145,9 @@ class TestVehicles(unittest.TestCase):
         
         response = self.client.get(f'/vehicles/customer/{self.customer_id}')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json['count'], 3)
+        self.assertEqual(response.json['status'], 'success')
+        self.assertEqual(len(response.json['vehicles']), 3)
+        self.assertIn('pagination', response.json)
     
     def test_get_customer_vehicles_nonexistent_customer(self):
         """Test retrieving vehicles for a non-existent customer"""

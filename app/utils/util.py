@@ -3,6 +3,7 @@ from jose import jwt
 from jose.exceptions import ExpiredSignatureError, JWTError
 from functools import wraps
 from flask import request, jsonify
+from marshmallow import ValidationError
 import os
 
 # Use environment variable for SECRET_KEY
@@ -58,3 +59,96 @@ def token_required(f):
         return f(customer_id, *args, **kwargs)
 
     return decorated
+
+
+def validate_request(schema):
+    """
+    Decorator to validate incoming request data against a Marshmallow schema.
+    Returns 400 with validation errors if validation fails.
+    
+    Usage:
+        @app.route('/customers', methods=['POST'])
+        @validate_request(customer_create_schema)
+        def create_customer(validated_data):
+            # validated_data is already validated and deserialized
+            ...
+    
+    Args:
+        schema: Marshmallow schema instance for validation
+    
+    Returns:
+        Decorator function that validates request JSON
+    """
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            try:
+                data = request.get_json()
+                
+                if data is None:
+                    return jsonify({
+                        'status': 'error',
+                        'message': 'Request body must be valid JSON',
+                        'errors': {}
+                    }), 400
+                
+                # Validate and deserialize data against schema
+                validated_data = schema.load(data)
+                
+                # Pass validated data to the route function
+                return f(validated_data, *args, **kwargs)
+                
+            except ValidationError as e:
+                return jsonify({
+                    'status': 'error',
+                    'message': 'Validation failed',
+                    'errors': e.messages
+                }), 400
+            except Exception as e:
+                return jsonify({
+                    'status': 'error',
+                    'message': 'Invalid JSON in request body',
+                    'errors': {'body': [str(e)]}
+                }), 400
+        
+        return decorated_function
+    return decorator
+
+
+def paginated_response(items_schema, pagination_obj, message="Resources retrieved successfully", data_key='data'):
+    """
+    Create a standardized pagination response.
+    
+    Usage:
+        pagination = Model.query.paginate(page=page, per_page=per_page, error_out=False)
+        return jsonify(paginated_response(
+            model_schema,
+            pagination,
+            'Models retrieved successfully',
+            data_key='models'
+        )), 200
+    
+    Args:
+        items_schema: Marshmallow schema for the items (can be many=True or single)
+        pagination_obj: Flask-SQLAlchemy pagination object
+        message: Success message
+        data_key: Key name for the data array in response (e.g., 'models', 'customers', 'parts')
+    
+    Returns:
+        dict: Standardized pagination response
+    """
+    return {
+        'status': 'success',
+        'message': message,
+        'pagination': {
+            'page': pagination_obj.page,
+            'per_page': pagination_obj.per_page,
+            'total_items': pagination_obj.total,
+            'total_pages': pagination_obj.pages,
+            'has_next': pagination_obj.has_next,
+            'has_prev': pagination_obj.has_prev,
+            'next_page': pagination_obj.next_num if pagination_obj.has_next else None,
+            'prev_page': pagination_obj.prev_num if pagination_obj.has_prev else None
+        },
+        data_key: items_schema.dump(pagination_obj.items)
+    }

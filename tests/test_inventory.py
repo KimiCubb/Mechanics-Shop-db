@@ -111,15 +111,18 @@ class TestInventory(unittest.TestCase):
         response = self.client.get('/inventory/')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json['message'], 'Inventory retrieved successfully')
-        self.assertEqual(response.json['count'], 5)
+        self.assertEqual(response.json['status'], 'success')
         self.assertEqual(len(response.json['parts']), 5)
+        self.assertIn('pagination', response.json)
+        self.assertEqual(response.json['pagination']['total_items'], 5)
     
     def test_get_parts_empty(self):
         """Test retrieving parts when none exist"""
         response = self.client.get('/inventory/')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json['count'], 0)
+        self.assertEqual(response.json['status'], 'success')
         self.assertEqual(len(response.json['parts']), 0)
+        self.assertEqual(response.json['pagination']['total_items'], 0)
     
     def test_get_single_part(self):
         """Test retrieving a specific part by ID"""
@@ -160,7 +163,8 @@ class TestInventory(unittest.TestCase):
         # Search for "Oil"
         response = self.client.get('/inventory/search?q=Oil')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json['count'], 2)  # "Engine Oil" and "Oil Filter"
+        self.assertEqual(response.json['status'], 'success')
+        self.assertEqual(len(response.json['parts']), 2)  # "Engine Oil" and "Oil Filter"
         self.assertTrue(all('Oil' in p['name'] for p in response.json['parts']))
     
     def test_search_parts_case_insensitive(self):
@@ -182,8 +186,9 @@ class TestInventory(unittest.TestCase):
         self.assertEqual(response1.status_code, 200)
         self.assertEqual(response2.status_code, 200)
         self.assertEqual(response3.status_code, 200)
-        self.assertEqual(response1.json['count'], 1)
-        self.assertEqual(response3.json['count'], 1)
+        self.assertEqual(response1.json['status'], 'success')
+        self.assertEqual(len(response1.json['parts']), 1)
+        self.assertEqual(len(response3.json['parts']), 1)
     
     def test_search_parts_no_query(self):
         """Test search without query parameter"""
@@ -209,7 +214,8 @@ class TestInventory(unittest.TestCase):
         # Search for something that doesn't exist
         response = self.client.get('/inventory/search?q=Transmission')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json['count'], 0)
+        self.assertEqual(response.json['status'], 'success')
+        self.assertEqual(len(response.json['parts']), 0)
     
     # ============================================
     # UPDATE TESTS
@@ -437,7 +443,8 @@ class TestInventory(unittest.TestCase):
         # Search for "Engine"
         response = self.client.get('/inventory/search?q=Engine')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json['count'], 2)  # "Engine Oil" and "Engine Filter"
+        self.assertEqual(response.json['status'], 'success')
+        self.assertEqual(len(response.json['parts']), 2)  # "Engine Oil" and "Engine Filter"
     
     def test_caching_get_all_parts(self):
         """Test that GET /inventory/ uses caching"""
@@ -450,7 +457,7 @@ class TestInventory(unittest.TestCase):
         
         # First request
         response1 = self.client.get('/inventory/')
-        count1 = response1.json['count']
+        count1 = len(response1.json['parts'])
         
         # Create another part
         part_payload2 = {
@@ -461,7 +468,7 @@ class TestInventory(unittest.TestCase):
         
         # Second request (should be cached and still show 1 part)
         response2 = self.client.get('/inventory/')
-        count2 = response2.json['count']
+        count2 = len(response2.json['parts'])
         
         # Both should be 200
         self.assertEqual(response1.status_code, 200)

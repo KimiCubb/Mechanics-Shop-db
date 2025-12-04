@@ -4,11 +4,10 @@ from marshmallow import fields, validate
 
 
 # ============================================
-# MARSHMALLOW SCHEMAS FOR INVENTORY
+# RESPONSE SCHEMA (GET responses)
 # ============================================
-
 class InventorySchema(ma.SQLAlchemyAutoSchema):
-    """Schema for Inventory (Parts) model"""
+    """Schema for Inventory (Parts) model - GET responses"""
     class Meta:
         model = Inventory
         load_instance = True
@@ -19,6 +18,27 @@ class InventorySchema(ma.SQLAlchemyAutoSchema):
     price = fields.Float(required=True, validate=validate.Range(min=0))
 
 
+# ============================================
+# CREATION SCHEMA (POST requests)
+# ============================================
+class InventoryCreateSchema(ma.Schema):
+    """Schema for POST /inventory"""
+    name = fields.Str(required=True, validate=validate.Length(min=1, max=100))
+    price = fields.Float(required=True, validate=validate.Range(min=0))
+
+
+# ============================================
+# UPDATE SCHEMA (PUT requests)
+# ============================================
+class InventoryUpdateSchema(ma.Schema):
+    """Schema for PUT /inventory/:id - all fields optional"""
+    name = fields.Str(validate=validate.Length(min=1, max=100))
+    price = fields.Float(validate=validate.Range(min=0))
+
+
+# ============================================
+# SERVICE TICKET PART SCHEMA
+# ============================================
 class ServiceTicketPartSchema(ma.SQLAlchemyAutoSchema):
     """Schema for ServiceTicketPart junction table (includes quantity)"""
     class Meta:
@@ -37,5 +57,7 @@ class ServiceTicketPartSchema(ma.SQLAlchemyAutoSchema):
 # Schema instances
 inventory_schema = InventorySchema()
 inventories_schema = InventorySchema(many=True)
+inventory_create_schema = InventoryCreateSchema()
+inventory_update_schema = InventoryUpdateSchema()
 service_ticket_part_schema = ServiceTicketPartSchema()
-service_ticket_parts_schema = ServiceTicketPartSchema(many=True)
+service_ticket_parts_schemas = ServiceTicketPartSchema(many=True)

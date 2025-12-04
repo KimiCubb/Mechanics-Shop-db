@@ -1,10 +1,12 @@
 from flask import request, jsonify
 from app.blueprints.customers import customers_bp
-from app.blueprints.customers.schemas import customer_schema, customers_schema, login_schema
-from marshmallow import ValidationError
+from app.blueprints.customers.schemas import (
+    customer_schema, customers_schema, login_schema,
+    customer_create_schema, customer_update_schema
+)
 from app.models import db, Customer, Vehicle, ServiceTicket
 from app.extensions import limiter, cache
-from app.utils.util import encode_token, token_required
+from app.utils.util import encode_token, token_required, validate_request, paginated_response
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -15,21 +17,15 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # LOGIN - Authenticate customer and return token
 @customers_bp.route('/login', methods=['POST'])
 @limiter.limit("5 per minute")  # Strict limit on login attempts
-def login():
+@validate_request(login_schema)
+def login(validated_data):
     """
     Customer login route.
-    Validates email and password, returns a JWT token on success.
+    Validates email and password using schema, returns a JWT token on success.
     """
     try:
-        data = request.get_json()
-        
-        # Validate with login_schema (only email and password)
-        errors = login_schema.validate(data)
-        if errors:
-            return jsonify({'error': 'Invalid payload', 'details': errors}), 400
-        
-        email = data['email']
-        password = data['password']
+        email = validated_data['email']
+        password = validated_data['password']
         
         # Query customer by email
         customer = Customer.query.filter_by(email=email).first()
@@ -46,10 +42,16 @@ def login():
                 'customer_id': customer.customer_id
             }), 200
         else:
-            return jsonify({'error': 'Invalid email or password'}), 401
+            return jsonify({
+                'status': 'error',
+                'message': 'Invalid email or password'
+            }), 401
             
     except Exception as e:
-        return jsonify({'error': str(e)}), 400
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 400
 
 
 # GET MY TICKETS - Get service tickets for authenticated customer
@@ -108,44 +110,50 @@ def get_my_tickets(customer_id):
 # CREATE - Add a new customer (Registration)
 @customers_bp.route('/', methods=['POST'])
 @limiter.limit("10 per minute")  # Prevent spam creation
-def create_customer():
-    """Create a new customer (registration)"""
+@validate_request(customer_create_schema)
+def create_customer(validated_data):
+    """
+    Create a new customer (registration).
+    Requires: name, phone, email, address, password
+    """
     try:
-        data = request.get_json()
-        
-        # Validate required fields including password
-        if not all(key in data for key in ['name', 'phone', 'email', 'address', 'password']):
-            return jsonify({'error': 'Missing required fields: name, phone, email, address, password'}), 400
-        
         # Check if email already exists
-        existing = Customer.query.filter_by(email=data['email']).first()
+        existing = Customer.query.filter_by(email=validated_data['email']).first()
         if existing:
-            return jsonify({'error': 'Email already registered'}), 400
+            return jsonify({
+                'status': 'error',
+                'message': 'Email already registered'
+            }), 400
         
         # Create new customer with hashed password
         new_customer = Customer(
-            name=data['name'],
-            phone=data['phone'],
-            email=data['email'],
-            address=data['address'],
-            password=generate_password_hash(data['password'])  # Hash the password!
+            name=validated_data['name'],
+            phone=validated_data['phone'],
+            email=validated_data['email'],
+            address=validated_data['address'],
+            password=generate_password_hash(validated_data['password'])  # Hash the password
         )
         
         db.session.add(new_customer)
         db.session.commit()
         
         return jsonify({
+            'status': 'success',
             'message': 'Customer created successfully',
             'customer': customer_schema.dump(new_customer)
         }), 201
     
     except Exception as e:
         db.session.rollback()
-        return jsonify({'error': str(e)}), 400
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 400
 
 
 # READ - Get all customers with pagination
 @customers_bp.route('/', methods=['GET'])
+@cache.cached(timeout=60, query_string=True)
 def get_customers():
     """
     Get all customers with pagination.
@@ -168,22 +176,12 @@ def get_customers():
             error_out=False
         )
         
-        customers = pagination.items
-        
-        return jsonify({
-            'message': 'Customers retrieved successfully',
-            'customers': customers_schema.dump(customers),
-            'pagination': {
-                'page': pagination.page,
-                'per_page': pagination.per_page,
-                'total_pages': pagination.pages,
-                'total_items': pagination.total,
-                'has_next': pagination.has_next,
-                'has_prev': pagination.has_prev,
-                'next_page': pagination.next_num if pagination.has_next else None,
-                'prev_page': pagination.prev_num if pagination.has_prev else None
-            }
-        }), 200
+        return jsonify(paginated_response(
+            customers_schema,
+            pagination,
+            'Customers retrieved successfully',
+            data_key='customers'
+        )), 200
     
     except Exception as e:
         return jsonify({'error': str(e)}), 400
@@ -213,49 +211,62 @@ def get_customer(customer_id):
 @customers_bp.route('/<int:customer_id>', methods=['PUT'])
 @token_required
 @limiter.limit("20 per minute")  # Rate limit updates
-def update_customer(token_customer_id, customer_id):
+@validate_request(customer_update_schema)
+def update_customer(validated_data, token_customer_id, customer_id):
     """
     Update an existing customer.
     Requires authentication - customer can only update their own profile.
+    Optional fields: name, phone, email, address, password
     """
     try:
         # Ensure customer can only update their own profile
         if token_customer_id != customer_id:
-            return jsonify({'error': 'Unauthorized. You can only update your own profile.'}), 403
+            return jsonify({
+                'status': 'error',
+                'message': 'Unauthorized. You can only update your own profile.'
+            }), 403
         
         customer = db.session.get(Customer, customer_id)
         
         if not customer:
-            return jsonify({'error': f'Customer with ID {customer_id} not found'}), 404
-        
-        data = request.get_json()
+            return jsonify({
+                'status': 'error',
+                'message': f'Customer with ID {customer_id} not found'
+            }), 404
         
         # Update fields if provided
-        if 'name' in data:
-            customer.name = data['name']
-        if 'phone' in data:
-            customer.phone = data['phone']
-        if 'email' in data:
+        if 'name' in validated_data:
+            customer.name = validated_data['name']
+        if 'phone' in validated_data:
+            customer.phone = validated_data['phone']
+        if 'email' in validated_data:
             # Check if new email already exists
-            existing = Customer.query.filter_by(email=data['email']).first()
+            existing = Customer.query.filter_by(email=validated_data['email']).first()
             if existing and existing.customer_id != customer_id:
-                return jsonify({'error': 'Email already in use'}), 400
-            customer.email = data['email']
-        if 'address' in data:
-            customer.address = data['address']
-        if 'password' in data:
-            customer.password = generate_password_hash(data['password'])  # Hash the new password
+                return jsonify({
+                    'status': 'error',
+                    'message': 'Email already in use'
+                }), 400
+            customer.email = validated_data['email']
+        if 'address' in validated_data:
+            customer.address = validated_data['address']
+        if 'password' in validated_data:
+            customer.password = generate_password_hash(validated_data['password'])
         
         db.session.commit()
         
         return jsonify({
+            'status': 'success',
             'message': 'Customer updated successfully',
             'customer': customer_schema.dump(customer)
         }), 200
     
     except Exception as e:
         db.session.rollback()
-        return jsonify({'error': str(e)}), 400
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 400
 
 
 # DELETE - Delete a customer (Requires Token)
