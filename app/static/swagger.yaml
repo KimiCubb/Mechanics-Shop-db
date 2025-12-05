@@ -68,13 +68,7 @@ paths:
         400:
           description: "Error creating tables"
           schema:
-            type: "object"
-            properties:
-              status:
-                type: "string"
-                example: "error"
-              message:
-                type: "string"
+            $ref: "#/definitions/ErrorResponse"
 
   /customers:
     post:
@@ -100,6 +94,8 @@ paths:
                 $ref: "#/definitions/CustomerResponse"
         400:
           description: "Invalid input or email already registered"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
     get:
       tags:
@@ -143,6 +139,8 @@ paths:
             $ref: "#/definitions/SingleCustomerResponse"
         404:
           description: "Customer not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
     put:
       tags:
@@ -168,10 +166,16 @@ paths:
             $ref: "#/definitions/SingleCustomerResponse"
         400:
           description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
         403:
           description: "Unauthorized - can only update own profile"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
         404:
           description: "Customer not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
     delete:
       tags:
@@ -196,8 +200,12 @@ paths:
                 type: "string"
         403:
           description: "Unauthorized - can only delete own account"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
         404:
           description: "Customer not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
   /customers/login:
     post:
@@ -218,8 +226,12 @@ paths:
             $ref: "#/definitions/LoginResponse"
         400:
           description: "Invalid payload"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
         401:
           description: "Invalid email or password"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
   /customers/my-tickets:
     get:
@@ -236,8 +248,12 @@ paths:
             $ref: "#/definitions/CustomerTicketsResponse"
         401:
           description: "Unauthorized - missing or invalid token"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
         404:
           description: "Customer not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
   /inventory:
     post:
@@ -263,6 +279,8 @@ paths:
                 $ref: "#/definitions/Part"
         400:
           description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
     get:
       tags:
@@ -298,6 +316,8 @@ paths:
                 $ref: "#/definitions/Part"
         404:
           description: "Part not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
     put:
       tags:
@@ -325,8 +345,12 @@ paths:
                 $ref: "#/definitions/Part"
         400:
           description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
         404:
           description: "Part not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
     delete:
       tags:
@@ -348,6 +372,8 @@ paths:
                 type: "string"
         404:
           description: "Part not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
   /inventory/search:
     get:
@@ -391,8 +417,12 @@ paths:
                 $ref: "#/definitions/ServiceTicketResponse"
         400:
           description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
         404:
           description: "Vehicle not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
     get:
       tags:
@@ -428,6 +458,8 @@ paths:
                 $ref: "#/definitions/ServiceTicketResponse"
         404:
           description: "Service ticket not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
     put:
       tags:
@@ -455,8 +487,12 @@ paths:
                 $ref: "#/definitions/ServiceTicketResponse"
         400:
           description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
         404:
           description: "Service ticket not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
     delete:
       tags:
@@ -478,6 +514,8 @@ paths:
                 type: "string"
         404:
           description: "Service ticket not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
   /service-tickets/{ticket_id}/assign-mechanic/{mechanic_id}:
     put:
@@ -506,8 +544,12 @@ paths:
                 $ref: "#/definitions/ServiceTicketResponse"
         400:
           description: "Mechanic already assigned to this ticket"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
         404:
           description: "Service ticket or mechanic not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
   /service-tickets/{ticket_id}/remove-mechanic/{mechanic_id}:
     put:
@@ -536,6 +578,8 @@ paths:
                 $ref: "#/definitions/ServiceTicketResponse"
         404:
           description: "Service ticket or mechanic not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
   /service-tickets/{ticket_id}/add-part:
     post:
@@ -565,8 +609,12 @@ paths:
                 $ref: "#/definitions/ServiceTicketResponse"
         400:
           description: "Invalid input or part already added to ticket"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
         404:
           description: "Ticket or part not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
   /service-tickets/{ticket_id}/remove-part/{part_id}:
     delete:
@@ -593,6 +641,8 @@ paths:
                 type: "string"
         404:
           description: "Ticket or part not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
   /service-tickets/{ticket_id}/edit:
     put:
@@ -621,8 +671,12 @@ paths:
                 $ref: "#/definitions/ServiceTicketResponse"
         400:
           description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
         404:
           description: "Service ticket or mechanic not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
   /service-tickets/{ticket_id}/parts:
     get:
@@ -642,6 +696,8 @@ paths:
             $ref: "#/definitions/TicketPartsResponse"
         404:
           description: "Service ticket not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
   /mechanics:
     post:
@@ -667,6 +723,8 @@ paths:
                 $ref: "#/definitions/MechanicResponse"
         400:
           description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
     get:
       tags:
@@ -702,6 +760,8 @@ paths:
                 $ref: "#/definitions/MechanicResponse"
         404:
           description: "Mechanic not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
     put:
       tags:
@@ -729,8 +789,12 @@ paths:
                 $ref: "#/definitions/MechanicResponse"
         400:
           description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
         404:
           description: "Mechanic not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
     delete:
       tags:
@@ -752,6 +816,8 @@ paths:
                 type: "string"
         404:
           description: "Mechanic not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
   /mechanics/top-performers:
     get:
@@ -789,8 +855,12 @@ paths:
                 $ref: "#/definitions/VehicleResponse"
         400:
           description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
         404:
           description: "Customer not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
     get:
       tags:
@@ -826,6 +896,8 @@ paths:
                 $ref: "#/definitions/VehicleResponse"
         404:
           description: "Vehicle not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
     put:
       tags:
@@ -853,8 +925,12 @@ paths:
                 $ref: "#/definitions/VehicleResponse"
         400:
           description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
         404:
           description: "Vehicle not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
     delete:
       tags:
@@ -876,6 +952,8 @@ paths:
                 type: "string"
         404:
           description: "Vehicle not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
   /vehicles/customer/{customer_id}:
     get:
@@ -895,6 +973,8 @@ paths:
             $ref: "#/definitions/CustomerVehiclesResponse"
         404:
           description: "Customer not found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
 definitions:
   HealthCheck:
