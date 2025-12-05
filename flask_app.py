@@ -2,6 +2,7 @@ import os
 from flask import redirect
 from app import create_app
 from app.models import db
+import requests
 
 # Read environment from .env (defaults to 'development')
 env = os.environ.get('FLASK_ENV', 'development')
@@ -12,6 +13,43 @@ app = create_app(config_name)
 @app.route('/', methods=['GET'])
 def index():
     return redirect('/api/docs')
+
+# Database initialization endpoint (one-time use)
+@app.route('/init-db', methods=['POST'])
+def init_db():
+    """
+    Initialize database tables.
+    One-time use endpoint for Render deployment.
+    
+    Usage: POST https://your-app.onrender.com/init-db
+    
+    After running once, you can delete this endpoint or it will do nothing if tables exist.
+    """
+    try:
+        with app.app_context():
+            db.create_all()
+        return {
+            'status': 'success',
+            'message': 'Database tables created successfully!',
+            'tables': [
+                'customer',
+                'vehicle', 
+                'mechanic',
+                'service_ticket',
+                'service_ticket_mechanic',
+                'inventory',
+                'service_ticket_part'
+            ]
+        }, 201
+    except Exception as e:
+        return {
+            'status': 'error',
+            'message': f'Error creating tables: {str(e)}'
+        }, 400
+
+# Test the init-db endpoint (uncomment to use)
+# response = requests.post('https://your-app-name.onrender.com/init-db')
+# print(response.json())
 
 application = app
 
