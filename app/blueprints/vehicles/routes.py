@@ -101,7 +101,7 @@ def get_vehicles():
         )
         
         return jsonify(paginated_response(
-            vehicles_schema,
+            vehicle_schema,
             pagination,
             'Vehicles retrieved successfully',
             data_key='vehicles'
@@ -157,7 +157,7 @@ def get_customer_vehicles(customer_id):
         )
         
         return jsonify(paginated_response(
-            vehicles_schema,
+            vehicle_schema,
             pagination,
             f'Vehicles for customer {customer_id} retrieved successfully',
             data_key='vehicles'

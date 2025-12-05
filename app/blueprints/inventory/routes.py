@@ -71,7 +71,7 @@ def get_parts():
         )
         
         return jsonify(paginated_response(
-            inventories_schema,
+            inventory_schema,
             pagination,
             'Inventory retrieved successfully',
             data_key='parts'
@@ -195,7 +195,7 @@ def search_parts():
         )
         
         return jsonify(paginated_response(
-            inventories_schema,
+            inventory_schema,
             pagination,
             f'Search results for "{query}"',
             data_key='parts'

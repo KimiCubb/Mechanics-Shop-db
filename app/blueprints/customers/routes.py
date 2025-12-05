@@ -177,7 +177,7 @@ def get_customers():
         )
         
         return jsonify(paginated_response(
-            customers_schema,
+            customer_schema,
             pagination,
             'Customers retrieved successfully',
             data_key='customers'

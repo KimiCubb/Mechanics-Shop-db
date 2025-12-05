@@ -122,14 +122,14 @@ def paginated_response(items_schema, pagination_obj, message="Resources retrieve
     Usage:
         pagination = Model.query.paginate(page=page, per_page=per_page, error_out=False)
         return jsonify(paginated_response(
-            model_schema,
+            model_schema,  # Single schema instance (no many=True)
             pagination,
             'Models retrieved successfully',
             data_key='models'
         )), 200
     
     Args:
-        items_schema: Marshmallow schema for the items (can be many=True or single)
+        items_schema: Marshmallow schema for the items (should be single instance, not many=True)
         pagination_obj: Flask-SQLAlchemy pagination object
         message: Success message
         data_key: Key name for the data array in response (e.g., 'models', 'customers', 'parts')
@@ -137,6 +137,9 @@ def paginated_response(items_schema, pagination_obj, message="Resources retrieve
     Returns:
         dict: Standardized pagination response
     """
+    # Use many=True to dump a list of items
+    data = items_schema.dump(pagination_obj.items, many=True)
+    
     return {
         'status': 'success',
         'message': message,
@@ -150,5 +153,5 @@ def paginated_response(items_schema, pagination_obj, message="Resources retrieve
             'next_page': pagination_obj.next_num if pagination_obj.has_next else None,
             'prev_page': pagination_obj.prev_num if pagination_obj.has_prev else None
         },
-        data_key: items_schema.dump(pagination_obj.items)
+        data_key: data
     }

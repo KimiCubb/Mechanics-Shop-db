@@ -75,7 +75,7 @@ def get_mechanics():
         )
         
         return jsonify(paginated_response(
-            mechanics_schema,
+            mechanic_schema,
             pagination,
             'Mechanics retrieved successfully',
             data_key='mechanics'

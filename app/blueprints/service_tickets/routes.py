@@ -74,7 +74,7 @@ def get_service_tickets():
         )
         
         return jsonify(paginated_response(
-            service_tickets_schema,
+            service_ticket_schema,
             pagination,
             'Service tickets retrieved successfully',
             data_key='service_tickets'
