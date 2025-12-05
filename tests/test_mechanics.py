@@ -106,14 +106,14 @@ class TestMechanics(unittest.TestCase):
         response = self.client.get('/mechanics/')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json['message'], 'Mechanics retrieved successfully')
-        self.assertEqual(response.json['count'], 3)
+        self.assertEqual(response.json['pagination']['total_items'], 3)
         self.assertEqual(len(response.json['mechanics']), 3)
     
     def test_get_mechanics_empty(self):
         """Test retrieving mechanics when none exist"""
         response = self.client.get('/mechanics/')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json['count'], 0)
+        self.assertEqual(response.json['pagination']['total_items'], 0)
         self.assertEqual(len(response.json['mechanics']), 0)
     
     def test_get_single_mechanic(self):
