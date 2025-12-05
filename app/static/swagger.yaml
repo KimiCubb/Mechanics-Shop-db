@@ -6,8 +6,8 @@ info:
   contact:
     name: "API Support"
     url: "https://github.com/KimiCubb/Mechanics-Shop-db"
-host: "mechanics-shop-db.onrender.com"
-basePath: ""
+host: "your-app-name.onrender.com"
+basePath: "/api"
 schemes:
   - "https"
 consumes:
@@ -34,6 +34,47 @@ paths:
           description: "API is healthy"
           schema:
             $ref: "#/definitions/HealthCheck"
+
+  /init-db:
+    post:
+      tags:
+        - "System"
+      summary: "Initialize database tables (Render deployment)"
+      description: "Create all database tables. One-time use for Render deployment. Safe to call multiple times."
+      responses:
+        201:
+          description: "Database tables created successfully"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "string"
+                example: "success"
+              message:
+                type: "string"
+                example: "Database tables created successfully!"
+              tables:
+                type: "array"
+                items:
+                  type: "string"
+                example:
+                  [
+                    "customer",
+                    "vehicle",
+                    "mechanic",
+                    "service_ticket",
+                    "inventory",
+                  ]
+        400:
+          description: "Error creating tables"
+          schema:
+            type: "object"
+            properties:
+              status:
+                type: "string"
+                example: "error"
+              message:
+                type: "string"
 
   /customers:
     post:
@@ -865,6 +906,31 @@ definitions:
       message:
         type: "string"
         example: "Mechanic Shop API is running"
+
+  ErrorResponse:
+    type: "object"
+    properties:
+      status:
+        type: "string"
+        example: "error"
+      message:
+        type: "string"
+        example: "An error occurred"
+
+  ValidationErrorResponse:
+    type: "object"
+    properties:
+      status:
+        type: "string"
+        example: "error"
+      message:
+        type: "string"
+        example: "Validation failed"
+      errors:
+        type: "object"
+        example:
+          email: ["Invalid email format"]
+          password: ["Password must be at least 6 characters"]
 
   Customer:
     type: "object"
