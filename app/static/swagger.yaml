@@ -6,7 +6,7 @@ info:
   contact:
     name: "API Support"
     url: "https://github.com/KimiCubb/Mechanics-Shop-db"
-host: "your-app-name.onrender.com"
+host: "https://mechanics-shop-db.onrender.com"
 basePath: "/api"
 schemes:
   - "https"
@@ -977,21 +977,14 @@ definitions:
   CustomerListResponse:
     type: "object"
     properties:
+      status:
+        type: "string"
+        example: "success"
       message:
         type: "string"
         example: "Customers retrieved successfully"
-      total_customers:
-        type: "integer"
-        example: 25
-      page:
-        type: "integer"
-        example: 1
-      per_page:
-        type: "integer"
-        example: 10
-      total_pages:
-        type: "integer"
-        example: 3
+      pagination:
+        $ref: "#/definitions/Pagination"
       customers:
         type: "array"
         items:
@@ -1200,10 +1193,14 @@ definitions:
   VehiclesListResponse:
     type: "object"
     properties:
+      status:
+        type: "string"
+        example: "success"
       message:
         type: "string"
-      count:
-        type: "integer"
+        example: "Vehicles retrieved successfully"
+      pagination:
+        $ref: "#/definitions/Pagination"
       vehicles:
         type: "array"
         items:
@@ -1212,12 +1209,13 @@ definitions:
   CustomerVehiclesResponse:
     type: "object"
     properties:
+      status:
+        type: "string"
+        example: "success"
       message:
         type: "string"
-      customer_id:
-        type: "integer"
-      count:
-        type: "integer"
+      pagination:
+        $ref: "#/definitions/Pagination"
       vehicles:
         type: "array"
         items:
@@ -1257,10 +1255,14 @@ definitions:
   PartsListResponse:
     type: "object"
     properties:
+      status:
+        type: "string"
+        example: "success"
       message:
         type: "string"
-      count:
-        type: "integer"
+        example: "Inventory retrieved successfully"
+      pagination:
+        $ref: "#/definitions/Pagination"
       parts:
         type: "array"
         items:
@@ -1269,13 +1271,13 @@ definitions:
   PartSearchResponse:
     type: "object"
     properties:
+      status:
+        type: "string"
+        example: "success"
       message:
         type: "string"
-      query:
-        type: "string"
-        example: "brake"
-      count:
-        type: "integer"
+      pagination:
+        $ref: "#/definitions/Pagination"
       parts:
         type: "array"
         items:
@@ -1351,10 +1353,14 @@ definitions:
   ServiceTicketsListResponse:
     type: "object"
     properties:
+      status:
+        type: "string"
+        example: "success"
       message:
         type: "string"
-      count:
-        type: "integer"
+        example: "Service tickets retrieved successfully"
+      pagination:
+        $ref: "#/definitions/Pagination"
       service_tickets:
         type: "array"
         items:
@@ -1532,10 +1538,14 @@ definitions:
   MechanicsListResponse:
     type: "object"
     properties:
+      status:
+        type: "string"
+        example: "success"
       message:
         type: "string"
-      count:
-        type: "integer"
+        example: "Mechanics retrieved successfully"
+      pagination:
+        $ref: "#/definitions/Pagination"
       mechanics:
         type: "array"
         items:
