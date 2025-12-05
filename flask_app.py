@@ -2,7 +2,6 @@ import os
 from flask import redirect
 from app import create_app
 from app.models import db
-import requests
 
 # Read environment from .env (defaults to 'development')
 env = os.environ.get('FLASK_ENV', 'development')
@@ -18,12 +17,16 @@ def index():
 @app.route('/init-db', methods=['POST'])
 def init_db():
     """
-    Initialize database tables.
-    One-time use endpoint for Render deployment.
+    Initialize database tables (one-time use for Render deployment).
+    
+    This endpoint creates all SQLAlchemy tables in the database.
+    Safe to call multiple times - won't error if tables already exist.
     
     Usage: POST https://your-app.onrender.com/init-db
     
-    After running once, you can delete this endpoint or it will do nothing if tables exist.
+    Returns:
+        201: Tables created successfully
+        400: Error creating tables
     """
     try:
         with app.app_context():
@@ -46,10 +49,6 @@ def init_db():
             'status': 'error',
             'message': f'Error creating tables: {str(e)}'
         }, 400
-
-# Test the init-db endpoint (uncomment to use)
-# response = requests.post('https://your-app-name.onrender.com/init-db')
-# print(response.json())
 
 application = app
 
